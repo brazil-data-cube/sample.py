@@ -31,11 +31,10 @@ pass_config = click.make_pass_decorator(Config, ensure=True)
               help='The WLTS server address (an URL).')
 @click.option('--user', type=click.STRING, default='admin',
               help='The user of server address.')
-# @click.option('--password', prompt=True, hide_input=True,default=None, help='The password of server address.')
+@click.option('--password', prompt=True, hide_input=True,default=None, help='The password of server address.')
 @pass_config
-def cli(config, url, user):
+def cli(config, url, user, password):
     """Sampledb on command line."""
-    password = 'G30r3@d3rGS'
     config.url = url
     config.auth = (user, password)
 

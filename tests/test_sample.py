@@ -6,3 +6,6 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 """Unit-test for SampleDB Client."""
+
+def teste():
+    pass

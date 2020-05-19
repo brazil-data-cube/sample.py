@@ -112,13 +112,16 @@ class WFS:
         if 'max_features' in kwargs:
             url += "&maxFeatures={}".format(kwargs['max_features'])
 
+        if 'bbox' in kwargs:
+            url += '&bbox={}'.format(kwargs['bbox'])
+
         if 'filter' in kwargs:
             url += "&cql_filter={}".format(kwargs['filter'])
 
         output = "application/json"
 
         if 'output' in kwargs:
-            output = "{}".format(kwargs['output'])
+            output = "{}".format(WFSFormats[kwargs['output']])
 
         url += "&outputFormat={}".format(output)
 

@@ -70,3 +70,14 @@ def dataset_metadata(config, name):
     retval = s.describe_dataset(name)
 
     pprint(retval['metadata_json'])
+
+@cli.command()
+@pass_config
+@click.argument('name', type=click.STRING, required=False)
+def get_observations(config, name):
+    """Retrive a Metadata Json from dataseet."""
+    s = sample(wfs=config.url, auth=config.auth)
+
+    retval = s.get_observation(name)
+
+    pprint(retval)

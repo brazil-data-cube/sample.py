@@ -7,6 +7,7 @@
 #
 """Python API client wrapper for SampleDB."""
 from shapely.geometry import MultiPolygon, Point, Polygon
+import geopandas as gpd
 
 from .dataset import DataSet
 from .wfs import WFS
@@ -86,7 +87,13 @@ class sample:
 
         geometry_name = 'location'
 
-        return self.get_feature(observation_name, geometry_name)
+        feature = self.get_feature(observation_name, geometry_name)
+
+        df_obs = gpd.GeoDataFrame.from_dict(feature['features'])
+
+        df_obs = df_obs.set_geometry(col='location', crs=feature['crs'])
+
+        return df_obs
 
     def get_ibge(self, name):
         """Return a ibge feature giving a name."""
@@ -94,7 +101,13 @@ class sample:
 
         geometry_name = 'geom'
 
-        return  self.get_feature(ibge_name, geometry_name)
+        feature = self.get_feature(ibge_name, geometry_name)
+
+        df_ibge = gpd.GeoDataFrame.from_dict(feature['features'])
+
+        df_ibge = df_ibge.set_geometry(col='geom', crs=feature['crs'])
+
+        return df_ibge
 
 
     def get_feature(self, name, geometry_name):
@@ -121,7 +134,6 @@ class sample:
                 feature = {geometry_name: Polygon(item['geometry']['coordinates'][0])}
 
             else:
-                print("Nenhum: {}".format(item['geometry']['type']))
                 raise Exception('Unsupported geometry type.')
 
             del item['properties']['bbox']

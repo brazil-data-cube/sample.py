@@ -43,6 +43,8 @@ setup_requires = [
 install_requires = [
     'requests>=2.20',
     'Shapely>=1.6.4',
+    'pandas>=0.24.0',
+    'geopandas>=0.6.0',
     'Click>=7.0',
 ]
 

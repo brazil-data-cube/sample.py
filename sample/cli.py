@@ -56,20 +56,18 @@ def describe_dataset(config, name):
 
     retval = s.describe_dataset(name)
 
-    del retval['metadata_json']
-
     pprint(retval)
 
 @cli.command()
 @pass_config
 @click.argument('name', type=click.STRING, required=False)
 def dataset_metadata(config, name):
-    """Retrive a Metadata Json from dataseet."""
+    """Retrive a Metadata Json from dataset."""
     s = sample(wfs=config.url, auth=config.auth)
 
     retval = s.describe_dataset(name)
 
-    pprint(retval['metadata_json'])
+    pprint(retval.metadata)
 
 @cli.command()
 @pass_config

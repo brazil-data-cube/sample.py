@@ -6,8 +6,9 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 """Python API client wrapper for SampleDB."""
-from shapely.geometry import MultiPolygon, Point, Polygon
 import geopandas as gpd
+import pyproj
+from shapely.geometry import MultiPolygon, Point, Polygon
 
 from .dataset import DataSet
 from .wfs import WFS
@@ -91,7 +92,10 @@ class sample:
 
         df_obs = gpd.GeoDataFrame.from_dict(feature['features'])
 
-        df_obs = df_obs.set_geometry(col='location', crs=feature['crs'])
+        crs = feature['crs']['properties']
+        crs = pyproj.CRS(crs['name'])
+
+        df_obs = df_obs.set_geometry(col='location', crs=crs.to_epsg())
 
         return df_obs
 
@@ -105,7 +109,10 @@ class sample:
 
         df_ibge = gpd.GeoDataFrame.from_dict(feature['features'])
 
-        df_ibge = df_ibge.set_geometry(col='geom', crs=feature['crs'])
+        crs = feature['crs']['properties']
+        crs = pyproj.CRS(crs['name'])
+
+        df_ibge = df_ibge.set_geometry(col='geom', crs=crs.to_epsg())
 
         return df_ibge
 

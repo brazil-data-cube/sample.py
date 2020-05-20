@@ -12,5 +12,11 @@ include *.txt
 include *.py
 include LICENSE
 include pytest.ini
+include *.yml
 recursive-include sample *.py
 recursive-include tests *.py
+recursive-include doc *.bat
+recursive-include doc *.css
+recursive-include doc *.py
+recursive-include doc *.rst
+recursive-include doc Makefile

@@ -151,3 +151,7 @@ class sample:
         fc['crs'] = js['crs']
 
         return fc
+
+    def save_feature(self, filename: str, gdf: gpd.geodataframe.GeoDataFrame, driver: str = "ESRI Shapefile"):
+        """Save GeoDataframe."""
+        gdf.to_file(filename, encoding="utf-8", driver=driver)

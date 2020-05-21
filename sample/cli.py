@@ -28,13 +28,13 @@ pass_config = click.make_pass_decorator(Config, ensure=True)
 
 @click.group()
 @click.option('--url', type=click.STRING, default='http://localhost',
-              help='The WLTS server address (an URL).')
-@click.option('--user', type=click.STRING, default='admin',
+              help='The GeoServer address (an URL).')
+@click.option('--user', type=click.STRING, default='reader',
               help='The user of server address.')
 @click.option('--password', prompt=True, hide_input=True,default=None, help='The password of server address.')
 @pass_config
 def cli(config, url, user, password):
-    """Sampledb on command line."""
+    """Sample on command line."""
     config.url = url
     config.auth = (user, password)
 
@@ -71,11 +71,15 @@ def dataset_metadata(config, name):
 
 @cli.command()
 @pass_config
-@click.argument('name', type=click.STRING, required=False)
-def get_observations(config, name):
-    """Retrive a Metadata Json from dataseet."""
+@click.argument('name', type=click.STRING, required=True)
+@click.option('--filename', type=click.STRING, required=True, help='File path or file handle to write to')
+@click.option('--driver', type=click.STRING, required=False, default='ESRI Shapefile',help='The OGR format driver used to write the vector file')
+def save_observations(config, name, filename, driver):
+    """Save observations giving observation name."""
     s = sample(wfs=config.url, auth=config.auth)
 
-    retval = s.get_observation(name)
+    gdf = s.get_observation(name)
 
-    pprint(retval)
+    s.save_feature(filename, gdf, driver)
+
+    pprint("Observation {} save in {}!".format(name, filename))

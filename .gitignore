@@ -136,3 +136,6 @@ dmypy.json
 
 # Sphinx documentation
 doc/sphinx/_build/
+
+# Jupyter Notebook
+.ipynb_checkpoints

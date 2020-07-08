@@ -6,20 +6,25 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 """Python API client wrapper for SampleDB."""
-
 import json
+
+import geopandas as gpd
+import pyproj
+
+from .utils import Utils
 
 
 class DataSet(dict):
     """DataSet Class."""
 
-    def __init__(self, data):
+    def __init__(self, wfs, data):
         """Initialize instance with dictionary data.
 
         :param data: Dict with class system metadata.
         """
         super(DataSet, self).__init__(data or {})
         self.prepare_metadata()
+        self.__wfs = wfs
 
     def prepare_metadata(self):
         """Refactory metadata."""
@@ -91,6 +96,26 @@ class DataSet(dict):
     def updated_at(self):
         """:return: created_at of dataset."""
         return self['updated_at']
+
+    @property
+    def observation(self):
+        """Return observation dataframe."""
+        observation_name = 'sampledb:{}'.format(self['observation_table_name'])
+
+        geometry_name = 'location'
+
+        feature = Utils._get_feature(self.__wfs, name=observation_name, geometry_name=geometry_name)
+        # feature = sample.get_feature(self.__wfs, name=observation_name, geometry_name=geometry_name)
+
+        df_obs = gpd.GeoDataFrame.from_dict(feature['features'])
+
+        crs = feature['crs']['properties']
+        crs = pyproj.CRS(crs['name'])
+
+        df_obs = df_obs.set_geometry(col=geometry_name, crs=crs.to_epsg())
+
+        return df_obs
+
 
 class DSMetada(dict):
     """DSMetada Class."""

@@ -8,6 +8,6 @@
 """Python Client Library for SampleDB."""
 from .sample import sample
 from .version import __version__
-from .wfs import WFS
 
-__all__ = ('__version__', 'WFS', 'sample', )
+__all__ = ('__version__',
+           'sample', )

@@ -7,7 +7,6 @@
 #
 """Python API client wrapper for SampleDB."""
 import geopandas as gpd
-import pyproj
 from shapely.geometry import MultiPolygon, Point, Polygon
 
 from .dataset import DataSet
@@ -56,7 +55,7 @@ class sample:
         """Describe Feature."""
         return self.__wfs.describe_feature(ft_name)
 
-    def describe_dataset(self, name):
+    def dataset(self, name):
         """Describe dataset."""
         if not name:
             raise AttributeError('Invalid Dataset Name')
@@ -67,10 +66,11 @@ class sample:
 
         feature = features['features'][0]
 
-        ds = DataSet(feature['properties'])
+        ds = DataSet(self.__wfs, feature['properties'])
 
         return  ds
 
+    @property
     def datasets(self):
         """Return all dataset name in sampledb."""
         features = self.__wfs.get_feature("sampledb:dataset")
@@ -81,76 +81,6 @@ class sample:
             result.append(ft['properties']['name'])
 
         return result
-
-    def get_observation(self, obs_name):
-        """Return observation giving a name."""
-        observation_name = 'sampledb:{}'.format(obs_name)
-
-        geometry_name = 'location'
-
-        feature = self.get_feature(observation_name, geometry_name)
-
-        df_obs = gpd.GeoDataFrame.from_dict(feature['features'])
-
-        crs = feature['crs']['properties']
-        crs = pyproj.CRS(crs['name'])
-
-        df_obs = df_obs.set_geometry(col='location', crs=crs.to_epsg())
-
-        return df_obs
-
-    def get_ibge(self, name):
-        """Return a ibge feature giving a name."""
-        ibge_name = 'ibge:{}'.format(name)
-
-        geometry_name = 'geom'
-
-        feature = self.get_feature(ibge_name, geometry_name)
-
-        df_ibge = gpd.GeoDataFrame.from_dict(feature['features'])
-
-        crs = feature['crs']['properties']
-        crs = pyproj.CRS(crs['name'])
-
-        df_ibge = df_ibge.set_geometry(col='geom', crs=crs.to_epsg())
-
-        return df_ibge
-
-
-    def get_feature(self, name, geometry_name):
-        """Return feature."""
-        js = self.__wfs.get_feature(name)
-
-        fc = dict()
-
-        fc['features'] = []
-
-        for item in js['features']:
-
-            if (item['geometry']['type'] == 'Point'):
-                feature = {geometry_name: Point(item['geometry']['coordinates'][0], item['geometry']['coordinates'][1])}
-
-            elif item['geometry']['type'] == 'MultiPolygon':
-                polygons = []
-                for polygon in item['geometry']['coordinates']:
-                    polygons += [Polygon(lr) for lr in polygon]
-                feature = {geometry_name: MultiPolygon(polygons)}
-
-            elif item['geometry']['type'] == 'Polygon':
-                # print("Polygon")
-                feature = {geometry_name: Polygon(item['geometry']['coordinates'][0])}
-
-            else:
-                raise Exception('Unsupported geometry type.')
-
-            del item['properties']['bbox']
-
-            feature.update(item['properties'])
-            fc['features'].append(feature)
-
-        fc['crs'] = js['crs']
-
-        return fc
 
     def save_feature(self, filename: str, gdf: gpd.geodataframe.GeoDataFrame, driver: str = "ESRI Shapefile"):
         """Save GeoDataframe."""

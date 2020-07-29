@@ -28,8 +28,10 @@ class DataSet(dict):
 
     def prepare_metadata(self):
         """Refactory metadata."""
-        m = json.loads(self['metadata_json'])
-        self.metadata_json = DSMetada(m)
+        if self['metadata_json'] is not None:
+            m = json.loads(self['metadata_json'])
+            self.metadata_json = DSMetada(m)
+
         del self['metadata_json']
 
     @property

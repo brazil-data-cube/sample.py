@@ -127,3 +127,15 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# PyCharm
+.idea/
+
+# MacOS
+.DS_Store
+
+# Sphinx documentation
+doc/sphinx/_build/
+
+# Jupyter Notebook
+.ipynb_checkpoints

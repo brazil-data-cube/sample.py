@@ -31,7 +31,7 @@ pass_config = click.make_pass_decorator(Config, ensure=True)
               help='The GeoServer address (an URL).')
 @click.option('--user', type=click.STRING, default='reader',
               help='The user of server address.')
-@click.option('--password', prompt=True, hide_input=True,default=None, help='The password of server address.')
+@click.option('--password', prompt=True, hide_input=True, default=None, help='The password of server address.')
 @pass_config
 def cli(config, url, user, password):
     """Sample on command line."""
@@ -44,7 +44,7 @@ def datasets(config):
     """List All Datasets Avaliables."""
     s = sample(wfs=config.url, auth=config.auth)
 
-    pprint(s.datasets())
+    pprint(s.datasets)
 
 
 @cli.command()
@@ -54,7 +54,7 @@ def describe_dataset(config, name):
     """Describe dataset giving a dataset name."""
     s = sample(wfs=config.url, auth=config.auth)
 
-    retval = s.describe_dataset(name)
+    retval = s.dataset(name)
 
     pprint(retval)
 
@@ -65,7 +65,7 @@ def dataset_metadata(config, name):
     """Retrive a Metadata Json from dataset."""
     s = sample(wfs=config.url, auth=config.auth)
 
-    retval = s.describe_dataset(name)
+    retval = s.dataset(name)
 
     pprint(retval.metadata)
 
@@ -78,7 +78,7 @@ def save_observations(config, name, filename, driver):
     """Save observations giving observation name."""
     s = sample(wfs=config.url, auth=config.auth)
 
-    gdf = s.get_observation(name)
+    gdf = s.dataset(name).observation
 
     s.save_feature(filename, gdf, driver)
 

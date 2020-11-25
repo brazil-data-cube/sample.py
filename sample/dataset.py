@@ -23,16 +23,20 @@ class DataSet(dict):
         :param data: Dict with class system metadata.
         """
         super(DataSet, self).__init__(data or {})
-        self.prepare_metadata()
+        self.metadata_json = self.prepare_metadata()
         self.__wfs = wfs
 
     def prepare_metadata(self):
         """Refactory metadata."""
         if self['metadata_json'] is not None:
             m = json.loads(self['metadata_json'])
-            self.metadata_json = DSMetada(m)
+            metadata_json = DSMetada(m)
 
-        del self['metadata_json']
+            del self['metadata_json']
+
+            return metadata_json
+        else:
+            return None
 
     @property
     def id(self):
@@ -107,14 +111,13 @@ class DataSet(dict):
         geometry_name = 'location'
 
         feature = Utils._get_feature(self.__wfs, name=observation_name, geometry_name=geometry_name)
-        # feature = sample.get_feature(self.__wfs, name=observation_name, geometry_name=geometry_name)
 
         df_obs = gpd.GeoDataFrame.from_dict(feature['features'])
 
         crs = feature['crs']['properties']
-        crs = pyproj.CRS(crs['name'])
+        crs = pyproj.crs.CRS(crs['name']).to_epsg()
 
-        df_obs = df_obs.set_geometry(col=geometry_name, crs=crs.to_epsg())
+        df_obs = df_obs.set_geometry(col=geometry_name, crs=f'EPSG:{crs}')
 
         return df_obs
 

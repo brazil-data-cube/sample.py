@@ -60,6 +60,8 @@ Install in development mode:
 
         pip3 install --upgrade setuptools
 
+    For more information, see [#f1]_.
+
     Or you can use Python Anaconda Environment:
 
     **1.** Create an virtual environment using conda with Python Interpreter Version +3::
@@ -95,3 +97,20 @@ The above command will generate the documentation in HTML and it will place it u
 .. code-block:: shell
 
     doc/sphinx/_build/html/
+
+.. rubric:: Footnotes
+
+.. [#f1]
+
+    Shapely 1.7 requires GEOS >=3.3, if you have a build message such as the one showed below:
+
+    .. code-block::
+
+        OSError: /path/lib/libgeos_c.so: cannot open shared object file: No such file or directory
+
+    You can instruct ``pip`` to look at the right place for header files when building Shapely:
+
+    .. code-block:: shell
+
+        $LD_LIBRARY_PATH="/usr/local/lib/" \
+        pip3 install shapely

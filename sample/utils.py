@@ -6,7 +6,8 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 """Python API client wrapper for SampleDB."""
-from shapely.geometry import MultiPolygon, MultiPoint, LineString, Point, Polygon
+from shapely.geometry import (LineString, MultiPoint, MultiPolygon, Point,
+                              Polygon)
 
 
 class Utils:

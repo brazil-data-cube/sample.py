@@ -68,7 +68,7 @@ class sample:
 
         ds = DataSet(self.__wfs, feature['properties'])
 
-        return  ds
+        return ds
 
     @property
     def datasets(self):

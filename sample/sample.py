@@ -9,22 +9,25 @@
 import geopandas as gpd
 from shapely.geometry import MultiPolygon, Point, Polygon
 
-from .dataset import DataSet
+from .dataset import Dataset
 from .wfs import WFS
 
 
-class sample:
+class SAMPLE:
     """Create wfs clients attached to given host addresses.
 
-    See https://github.com/brazil-data-cube/sample.py for more
-    information on SampleDB.
-
-    :param wfs:  WFS server URL.
-    :type wfs: str
+    .. note::
+        For more information about coverage definition, please, refer to
+        `Sample-DB <https://github.com/brazil-data-cube/sampledb>`_.
     """
 
     def __init__(self, **kwargs):
-        """Create a WFS client attached to the given host address (an URL)."""
+        """Create a WFS client attached to the given host address (an URL).
+
+        Args:
+            url (str): URL for the sample WFS.
+            auth (dict): user and password.
+        """
         invalid_parameters = set(kwargs) - {"wfs", "auth"}
 
         if invalid_parameters:
@@ -42,13 +45,16 @@ class sample:
         self.__wfs = None
         if 'wfs' in kwargs:
             if type(kwargs['wfs'] is str):
-                self.__wfs_server = kwargs['wfs']
                 self.__wfs = WFS(kwargs['wfs'], auth=self.__auth)
             else:
                 raise AttributeError('wfs must be a string')
 
     def list_feature(self):
-        """List WFS feature."""
+        """Return a list of WFS feature.
+
+        Returns:
+            list: A list with the names of available features.
+        """
         return self.__wfs.list_features()
 
     def describe_feature(self, ft_name):
@@ -56,7 +62,13 @@ class sample:
         return self.__wfs.describe_feature(ft_name)
 
     def dataset(self, name):
-        """Describe dataset."""
+        """Get dataset metadata for the given dataset identified by its name.
+
+        Args:
+            name (str): The dataset name identifier.
+        Returns:
+           dict: The coverage metadata as a dictionary.
+        """
         if not name:
             raise AttributeError('Invalid Dataset Name')
 
@@ -66,13 +78,17 @@ class sample:
 
         feature = features['features'][0]
 
-        ds = DataSet(self.__wfs, feature['properties'])
+        ds = Dataset(self.__wfs, feature['properties'])
 
         return ds
 
     @property
     def datasets(self):
-        """Return all dataset name in sampledb."""
+        """Return a list of all dataset available.
+
+        Returns:
+          list: A list with the names of available dataset.
+        """
         features = self.__wfs.get_feature("sampledb:dataset")
 
         result = list()
@@ -82,6 +98,45 @@ class sample:
 
         return result
 
-    def save_feature(self, filename: str, gdf: gpd.geodataframe.GeoDataFrame, driver: str = "ESRI Shapefile"):
-        """Save GeoDataframe."""
+    @staticmethod
+    def save_feature(filename: str, gdf: gpd.geodataframe.GeoDataFrame, driver: str = "ESRI Shapefile"):
+        """Save observations to file.
+
+        Args:
+            filename (str): The path or filename.
+            gdf (geodataframe): geodataframe to save.
+            driver (str): Drive (type) of output file.
+        """
         gdf.to_file(filename, encoding="utf-8", driver=driver)
+
+    @property
+    def url(self):
+        """Return the WFS server instance URL."""
+        return self.__wfs.host
+
+    def __str__(self):
+        """Return the string representation of the SAMPLEDB object."""
+        text = f'SAMPLEDB:\n\tURL: {self.__wfs.host}'
+
+        return text
+
+    def __repr__(self):
+        """Return the WTLS object representation."""
+        text = f'sampledb(url="{self.__wfs.host}")'
+
+        return text
+
+    def _repr_html_(self):
+        """HTML repr."""
+        datasets = str()
+        for ds in self.datasets:
+            datasets += f"<li>{ds}</li>"
+        return f"""<p>SAMPLE</p>
+                      <ul>
+                       <li><b>URL:</b> {self.__wfs.host}</li>
+                       <li><b>Datasets:</b></li>
+                       <ul>
+                       {datasets}
+                       </ul>
+                     </ul>
+                 """

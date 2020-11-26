@@ -5,19 +5,30 @@
     Python Client Library for SampleDB is free software; you can redistribute it and/or modify it
     under the terms of the MIT License; see LICENSE file for more details.
 
+.. include:: ../../README.rst
+   :end-before: About
 
-Welcome to sample's documentation!
-==================================
+Sample.py is a Python client library over a WFS endpoint for retrieving samples.
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :hidden:
+
+    self
 
 
+.. toctree::
+    :maxdepth: 2
+    :caption: Documentation:
 
-Indices and tables
-==================
+    installation
+    usage
+    api
+    repository
+    history
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+
+.. toctree::
+    :maxdepth: 1
+    :caption: Additional Notes
+
+    license

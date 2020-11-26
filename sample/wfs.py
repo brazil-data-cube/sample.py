@@ -14,22 +14,23 @@ from xml.dom import minidom
 import requests
 
 WFSFormats = {
-	'shp': 'shape-zip',
-	'kml': 'kml',
-	'csv': 'csv',
-	'json': 'application/json'
+    'shp': 'shape-zip',
+    'kml': 'kml',
+    'csv': 'csv',
+    'json': 'application/json'
 }
 
 
 class WFS:
-    """Create wfs clients attached to given host addresses.
-
-    :param host:  the WFS server URL.
-    :type host: str
-    """
+    """A class that describes a WFS."""
 
     def __init__(self, host, **kwargs):
-        """Create a WFS client attached to the given host address (an URL)."""
+        """Create  a WFS client attached to the given host address.
+
+        Args:
+            host (URL): The WFS url.
+            kwargs (dict): The user and password.
+        """
         self.host = host
         self.base_path = "wfs?service=wfs&version=1.0.0"
         self.__debug = False
@@ -49,16 +50,20 @@ class WFS:
                 self.__auth = kwargs['auth']
 
     def _get(self, uri):
-        """Get WFS."""
+        """Query the WFS service.
+
+        Args:
+            uri (str): URL for the WFS server.
+        """
         response = requests.get(uri, auth=self.__auth)
 
-        if (response.status_code) != 200:
+        if response.status_code != 200:
             raise Exception("Request Fail: {} ".format(responses[response.status_code]))
 
         return response.content.decode('utf-8')
 
     def list_features(self):
-        """List Features."""
+        """Return the list of features."""
         url = "{}/{}&request=GetCapabilities&outputFormat=application/json".format(self.host, self.base_path)
 
         doc = self._get(url)
@@ -75,11 +80,12 @@ class WFS:
         return features
 
     def describe_feature(self, ft_name):
-        """Describe Features."""
+        """Return features metadata."""
         if not ft_name:
             raise ValueError("Missing feature name.")
 
-        url = "{}/{}&request=DescribeFeatureType&typeName={}&outputFormat=application/json".format(self.host, self.base_path, ft_name)
+        url = "{}/{}&request=DescribeFeatureType&typeName={}&outputFormat=application/json". \
+            format(self.host, self.base_path, ft_name)
 
         doc = self._get(url)
 
@@ -101,11 +107,9 @@ class WFS:
         return feature
 
     def get_feature(self, ft_name, **kwargs):
-        """Get Feature."""
+        """Return the feature."""
         if not ft_name:
             raise ValueError("Missing feature name.")
-
-        # feature_desc = self.describe_feature(ft_name)
 
         url = "{}/{}&request=GetFeature&typeName={}".format(self.host, self.base_path, ft_name)
 

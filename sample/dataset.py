@@ -5,7 +5,8 @@
 # Python Client Library for SampleDB is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
-"""Python API client wrapper for SampleDB."""
+"""A class that represents a Dataset in SampleDB."""
+
 import json
 
 import geopandas as gpd
@@ -14,7 +15,7 @@ import pyproj
 from .utils import Utils
 
 
-class DataSet(dict):
+class Dataset(dict):
     """DataSet Class."""
 
     def __init__(self, wfs, data):
@@ -22,12 +23,12 @@ class DataSet(dict):
 
         :param data: Dict with class system metadata.
         """
-        super(DataSet, self).__init__(data or {})
+        super(Dataset, self).__init__(data or {})
         self.metadata_json = self.prepare_metadata()
         self.__wfs = wfs
 
     def prepare_metadata(self):
-        """Refactory metadata."""
+        """Prepare dataset metadata."""
         if self['metadata_json'] is not None:
             m = json.loads(self['metadata_json'])
             metadata_json = DSMetada(m)
@@ -40,72 +41,72 @@ class DataSet(dict):
 
     @property
     def id(self):
-        """:return: id of dataset."""
+        """Return the dataset id."""
         return self['id']
 
     @property
     def classification_system_name(self):
-        """:return: classification_system_name of dataset."""
+        """Return the dataset classification system name."""
         return self['classification_system_name']
 
     @property
     def collect_method(self):
-        """:return: collect_method of dataset."""
+        """Return the dataset collect method name."""
         return self['collect_method']
 
     @property
     def description(self):
-        """:return: description of dataset."""
+        """Return the dataset description."""
         return self['description']
 
     @property
     def end_date(self):
-        """:return: end_date of dataset."""
+        """Return the dataset end date."""
         return self['end_date']
 
     @property
     def start_date(self):
-        """:return: start_date of dataset."""
+        """Return the dataset start date."""
         return self['start_date']
 
     @property
     def midias_table_name(self):
-        """:return: midias_table_name of dataset."""
+        """Return the dataset midias table name."""
         return self['midias_table_name']
 
     @property
     def name(self):
-        """:return: name of dataset."""
+        """Return the dataset name."""
         return self['name']
 
     @property
     def metadata(self):
-        """:return: a metada_json."""
+        """Return the dataset metadata."""
         return self.metadata_json
 
     @property
     def observation_table_name(self):
-        """:return: observation_table_name of dataset."""
+        """Return the dataset observation table name."""
         return self['observation_table_name']
 
     @property
     def user_name(self):
-        """:return: user_name of dataset."""
+        """Return the dataset user name (user who performed the insertion of the dataset)."""
         return self['user_name']
 
     @property
     def created_at(self):
-        """:return: created_at of dataset."""
+        """Return the dataset created_at date."""
         return self['created_at']
 
     @property
     def updated_at(self):
-        """:return: created_at of dataset."""
+        """Return the dataset updated_at date."""
         return self['updated_at']
 
     @property
     def observation(self):
-        """Return observation dataframe."""
+        """Return the dataset observation dataframe."""
         observation_name = 'sampledb:{}'.format(self['observation_table_name'])
 
         geometry_name = 'location'
@@ -121,6 +122,10 @@ class DataSet(dict):
 
         return df_obs
 
+    def _repr_html_(self):
+        """HTML repr."""
+        return Utils.render_html('dataset.html', dataset=self)
+
 
 class DSMetada(dict):
     """DSMetada Class."""
@@ -134,30 +139,30 @@ class DSMetada(dict):
 
     @property
     def id(self):
-        """:return: id of ds metadata."""
+        """Return the metadata id."""
         return self['id']
 
     @property
     def version(self):
-        """:return: version of ds metadata."""
-        return self['id']
+        """Return the metadata version."""
+        return self['version']
 
     @property
     def titles(self):
-        """:return: titles of ds metadata."""
+        """Return the metadata titles."""
         return self['titles']
 
     @property
     def relatedIdentifiers(self):
-        """:return: relatedIdentifiers of ds metadata."""
+        """Return the metadata relatedIdentifiers."""
         return self['relatedIdentifiers']
 
     @property
     def contributors(self):
-        """:return: contributors of ds metadata."""
+        """Return the metadata contributors."""
         return self['contributors']
 
     @property
     def creators(self):
-        """:return: creators of ds metadata."""
+        """Return the metadata creators."""
         return self['creators']

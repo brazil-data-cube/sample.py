@@ -5,9 +5,14 @@
 # Python Client Library for SampleDB is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
-"""Python API client wrapper for SampleDB."""
+"""Utility functions for SampleDB library."""
+import jinja2
+from pkg_resources import resource_filename
 from shapely.geometry import (LineString, MultiPoint, MultiPolygon, Point,
                               Polygon)
+
+templateLoader = jinja2.FileSystemLoader(searchpath=resource_filename(__name__, 'templates/'))
+templateEnv = jinja2.Environment(loader=templateLoader)
 
 
 class Utils:
@@ -61,3 +66,9 @@ class Utils:
         fc['crs'] = js['crs']
 
         return fc
+
+    @staticmethod
+    def render_html(template_name, **kwargs):
+        """Render Jinja2 HTML template."""
+        template = templateEnv.get_template(template_name)
+        return template.render(**kwargs)

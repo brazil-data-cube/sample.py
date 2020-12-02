@@ -96,7 +96,7 @@ The above command will generate the documentation in HTML and it will place it u
 
 .. code-block:: shell
 
-    doc/sphinx/_build/html/
+    docs/sphinx/_build/html/
 
 .. rubric:: Footnotes
 

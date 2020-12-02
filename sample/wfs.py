@@ -122,15 +122,18 @@ class WFS:
         if 'filter' in kwargs:
             url += "&cql_filter={}".format(kwargs['filter'])
 
-        output = "application/json"
-
         if 'output' in kwargs:
             output = "{}".format(WFSFormats[kwargs['output']])
+        else:
+            output = "application/json"
 
         url += "&outputFormat={}".format(output)
 
         doc = self._get(url)
 
-        js = json.loads(doc)
+        try:
+            js = json.loads(doc)
+        except json.decoder.JSONDecodeError:
+            raise RuntimeError("Invalid json in get feature.")
 
         return js

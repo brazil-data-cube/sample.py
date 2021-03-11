@@ -1,26 +1,26 @@
 ..
-    This file is part of Python Client Library for SampleDB.
-    Copyright (C) 2019 INPE.
+    This file is part of Python Client Library for Sample Database Model.
+    Copyright (C) 2020-2021 INPE.
 
-    Python Client Library for SampleDB is free software; you can redistribute it and/or modify it
+    Python Client Library for Sample Database Model is free software; you can redistribute it and/or modify it
     under the terms of the MIT License; see LICENSE file for more details.
 
 
-================================
-Python Client Library for Sample
-================================
+===============================================
+Python Client Library for Sample Database Model
+===============================================
 
 
 .. image:: https://img.shields.io/badge/license-MIT-green
         :target: https://github.com//brazil-data-cube/sample.py/blob/master/LICENSE
         :alt: Software License
 
-.. image:: https://travis-ci.org/brazil-data-cube/sample.py.svg?branch=master
-        :target: https://travis-ci.org/brazil-data-cube/sample.py
+.. image:: https://drone.dpi.inpe.br/api/badges/brazil-data-cube/sample.py/status.svg
+        :target: https://drone.dpi.inpe.br/brazil-data-cube/sample.py
         :alt: Build Status
 
-.. image:: https://coveralls.io/repos/github/brazil-data-cube/sample.py/badge.svg?branch=master
-        :target: https://coveralls.io/github/brazil-data-cube/sample.py?branch=master
+.. image:: https://codecov.io/gh/brazil-data-cube/sample.py/branch/master/graph/badge.svg?token=KCJM9B3058
+        :target: https://codecov.io/gh/brazil-data-cube/sample.py
         :alt: Code Coverage Test
 
 .. image:: https://readthedocs.org/projects/sample/badge/?version=latest
@@ -38,25 +38,53 @@ Python Client Library for Sample
 About
 =====
 
-Python client library over a WFS endpoint for retrieving samples.
+Currently, several projects systematically provide information on the dynamics of land use and cover. Well known projects include PRODES, DETER and TerraClass. These projects are developed by INPE and they produce information on land use and coverage used by the Brazilian Government to make public policy decisions. Besides these projects there are other initiatives from universities and space agencies devoted to the creation of national and global maps.
 
-For more information on sample.py, see:
+These data products are generated using different approaches and methodologies. In this context, the data set used in the sample and validation plays a fundamental role in the classification algorithms that generate new land use and coverage maps. A classified map’s accuracy depends directly on the quality of the training samples used by the machine learning methods.
 
-- `sample-db <https://github.com/brazil-data-cube/sample-db>`_: SQLAlchemy models and utility functions to query and store data.
+Land use and cover samples are collected by different projects and individuals, using different methods, such as in situ gathering in fieldwork and visual interpretation of high-resolution satellite images. An important requirement is to be able to describe samples with proper metadata that characterize their differences and organize them in a shared database to facilitate the reproducibility of experiments. It is also important to develop tools to easily discover, query, access, and process this shared sample database.
 
-- `sample-db-utils <https://github.com/brazil-data-cube/sample-db-utils>`_: Data transformation routines from different formats.
+Sample-DB (Sample Database) provides a data model that represents the land use and cover samples collected by different projects and individuals.
+
+To facilitate access to samples of land use and land cover stored in the database, a Python package called **SAMPLE.py** was developed. This package retrieves the land use and land cover samples that were made available via WFS by the GeoServer application.
+
+This package is related to other softwares in the Brazil Data Cube project:
+
+- `SAMPLE-DB <https://github.com/brazil-data-cube/sample-db>`_: Sample Database Model.
+
+- `SAMPLE-DB-UTILS <https://github.com/brazil-data-cube/sample-db-utils>`_: Utility Functions for the SAMPLE-DB.
+
+- `SAMPLE.py <https://github.com/brazil-data-cube/sample.py>`_: Python Client Library for Sample-DB.
+
+- `LCCS-DB <https://github.com/brazil-data-cube/lccs-db>`_: Land Cover Classification System Database Model.
+
+- `LCCS-WS-SPEC <https://github.com/brazil-data-cube/lccs-ws-spec>`_: Land Cover Classification System Web Service specification.
+
+- `LCCS-WS <https://github.com/brazil-data-cube/lccs-ws>`_: Land Cover Classification System Web Service implementation.
+
+- `LCCS.py <https://github.com/brazil-data-cube/lccs.py>`_: Python Client Library for Land Cover Classification System Web Service.
 
 Installation
 ============
 
-See `INSTALL.rst <./INSTALL.rst>`_.
 
-Using sample.py in the Command Line
-===================================
+Install from GitHub::
 
-See `CLI.rst <./CLI.rst>`_.
+    pip3 install git+https://github.com/brazil-data-cube/sample.py
 
-Developer Documentation
-=======================
 
-**Under Developing**
+Documentation
+=============
+
+
+See https://samplepy.readthedocs.io/en/latest/
+
+
+License
+=======
+
+.. admonition::
+    Copyright (C) 2020-2021 INPE.
+
+    Python Client Library for Sample Database Model. is free software; you can redistribute it and/or modify it
+    under the terms of the MIT License; see LICENSE file for more details.

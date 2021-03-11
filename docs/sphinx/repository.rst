@@ -2,7 +2,7 @@
     This file is part of Python Client Library for SampleDB.
     Copyright (C) 2020 INPE.
 
-    Python Client Library for WTSS is free software; you can redistribute it and/or modify it
+    Python Client Library for Sample Database Model is free software; you can redistribute it and/or modify it
     under the terms of the MIT License; see LICENSE file for more details.
 
 

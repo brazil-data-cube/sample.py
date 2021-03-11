@@ -1,11 +1,11 @@
 #
-# This file is part of Python Client Library for SampleDB.
-# Copyright (C) 2019-2020 INPE.
+# This file is part of Python Client Library for Sample Database Model.
+# Copyright (C) 2020-2021 INPE.
 #
-# Python Client Library for SampleDB is free software; you can redistribute it and/or modify it
+# Python Client Library for Sample Database Model is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
-"""Configuration file for the Python Client Library for SampleDB documentation.
+"""Configuration file for the Python Client Library for Sample Database Model documentation.
 
 The documentation system is based on Sphinx. If you want to know
 more about the options to be used for configuration, please, see:
@@ -57,7 +57,6 @@ exclude_patterns = [
 html_theme = 'sphinx_rtd_theme'
 
 html_theme_options = {
-    'canonical_url': 'https://brazil-data-cube.github.io/',
     'analytics_id': 'XXXXXXXXXX',
     'logo_only': False,
     'display_version': True,
@@ -73,11 +72,13 @@ html_theme_options = {
     'titles_only': False
 }
 
+html_baseurl = 'https://brazil-data-cube.github.io/'
+
 #html_theme_path = ''
 
 #html_style = ''
 
-html_title = 'SAMPLE'
+html_title = 'Python Client Library for Sample Database Model'
 
 html_context = {
     'display_github': False,
@@ -114,3 +115,5 @@ numfig_format = {
 
 copybutton_prompt_text = r'>>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: '
 copybutton_prompt_is_regexp = True
+
+master_doc = 'index'

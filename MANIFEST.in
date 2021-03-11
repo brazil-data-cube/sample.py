@@ -27,4 +27,5 @@ recursive-include docs *.ico
 recursive-include docs *.png
 recursive-include examples *.ipynb
 recursive-include examples *.png
+recursive-include examples *.py
 

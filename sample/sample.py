@@ -1,8 +1,8 @@
 #
-# This file is part of Python Client Library for SampleDB.
-# Copyright (C) 2019 INPE.
+# This file is part of Python Client Library for Sample Database Model.
+# Copyright (C) 2020-2021 INPE.
 #
-# Python Client Library for SampleDB is free software; you can redistribute it and/or modify it
+# Python Client Library for Sample Database Model is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 """Python API client wrapper for SampleDB."""
@@ -10,6 +10,7 @@ import geopandas as gpd
 from shapely.geometry import MultiPolygon, Point, Polygon
 
 from .dataset import Dataset
+from .utils import Utils
 from .wfs import WFS
 
 
@@ -61,7 +62,7 @@ class SAMPLE:
         """Describe Feature."""
         return self.__wfs.describe_feature(ft_name)
 
-    def dataset(self, name):
+    def _get_dataset(self, name):
         """Get dataset metadata for the given dataset identified by its name.
 
         Args:
@@ -78,12 +79,31 @@ class SAMPLE:
 
         feature = features['features'][0]
 
-        ds = Dataset(self.__wfs, feature['properties'])
+        return Dataset(self.__wfs, feature['properties'])
 
-        return ds
+    def __getitem__(self, key):
+        """Get dataset whose name is identified by the key.
 
-    @property
-    def datasets(self):
+        Returns:
+            Dataset: A dataset object.
+
+        Raises:
+            ConnectionError: If the server is not reachable.
+            HTTPError: If the server response indicates an error.
+            ValueError: If the response body is not a json document.
+
+        Example:
+            Get a dataset object named ``BDC Sample Dataset - Test Area``:
+            .. doctest::
+                :skipif: SAMPLE_EXAMPLE_URL is None
+                >>> from sample import *
+                >>> service = SAMPLE(SAMPLE_EXAMPLE_URL)
+                >>> service['BDC Sample Dataset - Test Area']
+                dataset...
+        """
+        return self._get_dataset(key)
+
+    def _list_datasets(self):
         """Return a list of all dataset available.
 
         Returns:
@@ -97,6 +117,25 @@ class SAMPLE:
             result.append(ft['properties']['name'])
 
         return result
+
+    @property
+    def datasets(self):
+        """Return a list of all dataset available.
+
+        Returns:
+          list: A list with the names of available dataset.
+        """
+        return self._list_datasets()
+
+    def __iter__(self):
+        """Iterate over collections available in the service.
+
+        Returns:
+            A dataset at each iteration.
+
+        """
+        for dataset in self.datasets:
+            yield self[dataset]
 
     @staticmethod
     def save_feature(filename: str, gdf: gpd.geodataframe.GeoDataFrame, driver: str = "ESRI Shapefile"):
@@ -121,22 +160,28 @@ class SAMPLE:
         return text
 
     def __repr__(self):
-        """Return the WTLS object representation."""
+        """Return the SAMPLEDB object representation."""
         text = f'sampledb(url="{self.__wfs.host}")'
 
         return text
 
     def _repr_html_(self):
         """HTML repr."""
-        datasets = str()
-        for ds in self.datasets:
-            datasets += f"<li>{ds}</li>"
-        return f"""<p>SAMPLE</p>
-                      <ul>
-                       <li><b>URL:</b> {self.__wfs.host}</li>
-                       <li><b>Datasets:</b></li>
-                       <ul>
-                       {datasets}
-                       </ul>
-                     </ul>
-                 """
+        ds_list = self._list_datasets()
+
+        html = Utils.render_html('sample.html', url={self.__wfs.host}, datasets=ds_list)
+
+        return html
+
+    def _ipython_key_completions_(self):
+        """Integrate key completions for SAMPLE in IPython.
+
+        Returns:
+            list: The list of available datasets in the service.
+
+        Raises:
+            ConnectionError: If the server is not reachable.
+            HTTPError: If the server response indicates an error.
+            ValueError: If the response body is not a json document.
+        """
+        return self._list_datasets()

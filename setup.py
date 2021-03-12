@@ -1,11 +1,11 @@
 #
-# This file is part of Python Client Library for SampleDB.
-# Copyright (C) 2019 INPE.
+# This file is part of Python Client Library for Sample Database Model.
+# Copyright (C) 2020-2021 INPE.
 #
-# Python Client Library for SampleDB is free software; you can redistribute it and/or modify it
+# Python Client Library for Sample Database Model is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
-"""Python Client Library for SampleDB."""
+"""Python Client Library for Sample Database Model."""
 
 import os
 
@@ -69,10 +69,10 @@ setup(
     version=version,
     description=__doc__,
     long_description=readme + '\n\n' + history,
-    keywords=['Land Use Land Cover', 'Database', 'Samples'],
+    keywords=['Land Use and Land Cover', 'Database', 'Samples', 'Earth Observations', 'GIS'],
     license='MIT',
-    author='INPE',
-    author_email='brazildatacube@dpi.inpe.br',
+    author='Brazil Data Cube Team',
+    author_email='brazildatacube@inpe.br',
     url='https://github.com/brazil-data-cube/sample.py',
     packages=packages,
     zip_safe=False,

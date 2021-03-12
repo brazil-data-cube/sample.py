@@ -11,7 +11,7 @@ from pprint import pprint
 
 import click
 
-from .sample import sample
+from .sample import SAMPLE
 
 
 class Config:
@@ -31,55 +31,98 @@ pass_config = click.make_pass_decorator(Config, ensure=True)
               help='The GeoServer address (an URL).')
 @click.option('--user', type=click.STRING, default='reader',
               help='The user of server address.')
-@click.option('--password', prompt=True, hide_input=True,default=None, help='The password of server address.')
+@click.option('--password', prompt=True, hide_input=True, default=None, help='The password of server address.')
 @pass_config
 def cli(config, url, user, password):
     """Sample on command line."""
     config.url = url
     config.auth = (user, password)
 
-@cli.command()
-@pass_config
-def datasets(config):
-    """List All Datasets Avaliables."""
-    s = sample(wfs=config.url, auth=config.auth)
 
-    pprint(s.datasets())
+@cli.command()
+@click.option('-v', '--verbose', is_flag=True, default=False)
+@pass_config
+def datasets(config, verbose):
+    """List available datasets."""
+    if verbose:
+        click.secho(f'WFS: {config.url}', bold=True, fg='black')
+        click.secho('\tRetrieving the list of available datasets... ',
+                    bold=False, fg='black')
+    s = SAMPLE(wfs=config.url, auth=config.auth)
+
+    if verbose:
+        for ds in s.datasets:
+            click.secho(f'\t\t- {ds}', bold=True, fg='green')
+    else:
+        for ds in s.datasets:
+            click.secho(f'{ds}', bold=True, fg='green')
+
+    if verbose:
+        click.secho('\tFinished!', bold=False, fg='black')
 
 
 @cli.command()
 @pass_config
 @click.argument('name', type=click.STRING, required=False)
-def describe_dataset(config, name):
+@click.option('-v', '--verbose', is_flag=True, default=False)
+def describe_dataset(config, name, verbose):
     """Describe dataset giving a dataset name."""
-    s = sample(wfs=config.url, auth=config.auth)
+    if verbose:
+        click.secho(f'Server: {config.url}', bold=True, fg='black')
+        click.secho('\tRetrieving the describe of dataset... ',
+                    bold=False, fg='black')
 
-    retval = s.describe_dataset(name)
+    s = SAMPLE(wfs=config.url, auth=config.auth)
 
-    pprint(retval)
+    retval = s.dataset(name)
+
+    click.secho(f'\t- {retval}', bold=True, fg='green')
+
+    if verbose:
+        click.secho('\tFinished!', bold=False, fg='black')
+
 
 @cli.command()
 @pass_config
 @click.argument('name', type=click.STRING, required=False)
-def dataset_metadata(config, name):
-    """Retrive a Metadata Json from dataset."""
-    s = sample(wfs=config.url, auth=config.auth)
+@click.option('-v', '--verbose', is_flag=True, default=False)
+def dataset_metadata(config, name, verbose):
+    """Retrieve the dataset metadata."""
+    if verbose:
+        click.secho(f'Server: {config.url}', bold=True, fg='black')
+        click.secho('\tRetrieving the dataset metadata... ',
+                    bold=False, fg='black')
+    s = SAMPLE(wfs=config.url, auth=config.auth)
 
-    retval = s.describe_dataset(name)
+    retval = s.dataset(name)
 
-    pprint(retval.metadata)
+    click.secho(f'\t- {retval}', bold=True, fg='green')
+
+    if verbose:
+        click.secho('\tFinished!', bold=False, fg='black')
+
 
 @cli.command()
 @pass_config
 @click.argument('name', type=click.STRING, required=True)
 @click.option('--filename', type=click.STRING, required=True, help='File path or file handle to write to')
-@click.option('--driver', type=click.STRING, required=False, default='ESRI Shapefile',help='The OGR format driver used to write the vector file')
-def save_observations(config, name, filename, driver):
+@click.option('--driver', type=click.STRING, required=False, default='ESRI Shapefile',
+              help='The OGR format driver used to write the vector file')
+@click.option('-v', '--verbose', is_flag=True, default=False)
+def save_observations(config, name, filename, driver, verbose):
     """Save observations giving observation name."""
-    s = sample(wfs=config.url, auth=config.auth)
+    if verbose:
+        click.secho(f'Server: {config.url}', bold=True, fg='black')
+        click.secho('\tSave dataset obserservation ',
+                    bold=False, fg='black')
 
-    gdf = s.get_observation(name)
+    s = SAMPLE(wfs=config.url, auth=config.auth)
+
+    gdf = s.dataset(name).observation
 
     s.save_feature(filename, gdf, driver)
 
     pprint("Observation {} save in {}!".format(name, filename))
+
+    if verbose:
+        click.secho('\tFinished!', bold=False, fg='black')

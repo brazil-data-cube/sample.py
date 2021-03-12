@@ -69,7 +69,7 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/_build/
+docs/sphinx/_build/
 
 # PyBuilder
 target/
@@ -133,9 +133,6 @@ dmypy.json
 
 # MacOS
 .DS_Store
-
-# Sphinx documentation
-doc/sphinx/_build/
 
 # Jupyter Notebook
 .ipynb_checkpoints

@@ -31,6 +31,10 @@ Python Client Library for Sample
         :target: https://www.tidyverse.org/lifecycle/#experimental
         :alt: Software Life Cycle
 
+.. image:: https://img.shields.io/discord/689541907621085198?logo=discord&logoColor=ffffff&color=7389D8
+        :target: https://discord.com/channels/689541907621085198#
+        :alt: Join us at Discord
+
 About
 =====
 

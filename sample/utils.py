@@ -5,8 +5,14 @@
 # Python Client Library for SampleDB is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
-"""Python API client wrapper for SampleDB."""
-from shapely.geometry import MultiPolygon, Point, Polygon
+"""Utility functions for SampleDB library."""
+import jinja2
+from pkg_resources import resource_filename
+from shapely.geometry import (LineString, MultiPoint, MultiPolygon, Point,
+                              Polygon)
+
+templateLoader = jinja2.FileSystemLoader(searchpath=resource_filename(__name__, 'templates/'))
+templateEnv = jinja2.Environment(loader=templateLoader)
 
 
 class Utils:
@@ -28,8 +34,17 @@ class Utils:
 
         for item in js['features']:
 
-            if (item['geometry']['type'] == 'Point'):
-                feature = {kwargs['geometry_name']: Point(item['geometry']['coordinates'][0], item['geometry']['coordinates'][1])}
+            if item['geometry']['type'] == 'Point':
+                feature = {kwargs['geometry_name']: Point(item['geometry']['coordinates'][0],
+                                                          item['geometry']['coordinates'][1])}
+            elif item['geometry']['type'] == 'MultiPoint':
+                points = []
+                for point in item['geometry']['coordinates']:
+                    points += [Point(point)]
+                feature = {kwargs['geometry_name']: MultiPoint(points)}
+
+            elif item['geometry']['type'] == 'LineString':
+                feature = {kwargs['geometry_name']: LineString(item['geometry']['coordinates'])}
 
             elif item['geometry']['type'] == 'MultiPolygon':
                 polygons = []
@@ -51,3 +66,9 @@ class Utils:
         fc['crs'] = js['crs']
 
         return fc
+
+    @staticmethod
+    def render_html(template_name, **kwargs):
+        """Render Jinja2 HTML template."""
+        template = templateEnv.get_template(template_name)
+        return template.render(**kwargs)

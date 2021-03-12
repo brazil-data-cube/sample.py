@@ -14,12 +14,15 @@ include LICENSE
 include pytest.ini
 include *.yml
 recursive-include sample *.py
+recursive-include sample *.html
 recursive-include tests *.py
-recursive-include doc *.bat
-recursive-include doc *.css
-recursive-include doc *.py
-recursive-include doc *.rst
-recursive-include doc Makefile
+recursive-include docs *.bat
+recursive-include docs *.css
+recursive-include docs *.py
+recursive-include docs *.rst
+recursive-include docs Makefile
+recursive-include docs *.ico
+recursive-include docs *.png
 recursive-include examples *.ipynb
 recursive-include examples *.png
 

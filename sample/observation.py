@@ -5,7 +5,8 @@
 # Python Client Library for SampleDB is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 #
-"""Python API client wrapper for SampleDB."""
+"""A class that represents a Observation in SampleDB."""
+
 import json
 
 
@@ -21,20 +22,20 @@ class Observation(dict):
 
     @property
     def id(self):
-        """:return: id of observation."""
+        """Return the observation id."""
         return self['id']
 
     @property
     def user_name(self):
-        """:return: user_name of observation."""
+        """Return the observation user name."""
         return self['user_name']
 
     @property
     def created_at(self):
-        """:return: created_at of observation."""
+        """Return the observation created_at."""
         return self['created_at']
 
     @property
     def updated_at(self):
-        """:return: created_at of observation."""
+        """Return the observation updated_at."""
         return self['updated_at']

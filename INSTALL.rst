@@ -8,21 +8,25 @@
 Installation
 ============
 
-``sample.py`` depends essentially on `Requests <https://requests.readthedocs.io/en/master/>`_ and `Geopandas <https://geopandas.org/>`_ . Please, read the instructions below in order to install ``sample.py``.
+``sample.py`` depends essentially on `Requests <https://requests.readthedocs.io/en/master/>`_ , `Shapely <https://shapely.readthedocs.io/en/stable/manual.html>`_ and `Geopandas <https://geopandas.org/>`_ . Please, read the instructions below in order to install ``sample.py``.
 
 Production installation
 -----------------------
 
 **Under Development!**
 
-Development installation
-------------------------
+Development Installation - GitHub
+---------------------------------
 
-Clone the software repository:
+Clone the Software Repository
++++++++++++++++++++++++++++++
 
-.. code-block:: shell
+Use ``git`` to clone the software repository::
 
         $ git clone https://github.com/brazil-data-cube/sample.py.git
+
+Install sample.py in Development Mode
++++++++++++++++++++++++++++++++++++++
 
 Go to the source code folder:
 
@@ -36,11 +40,51 @@ Install in development mode:
 
         $ pip3 install -e .[all]
 
+.. note::
+
+    If you want to create a new *Python Virtual Environment*, please, follow this instruction:
+
+    **1.** Create a new virtual environment linked to Python 3.7::
+
+        python3.7 -m venv venv
+
+
+    **2.** Activate the new environment::
+
+        source venv/bin/activate
+
+
+    **3.** Update pip and setuptools::
+
+        pip3 install --upgrade pip
+
+        pip3 install --upgrade setuptools
+
+    For more information, see [#f1]_.
+
+    Or you can use Python Anaconda Environment:
+
+    **1.** Create an virtual environment using conda with Python Interpreter Version +3::
+
+        conda create --name bdc-sample python=3
+
+    **2.** Activate environment::
+
+        conda activate bdc-sample
+
+
+Run the Tests
++++++++++++++
+
 Run the tests:
 
 .. code-block:: shell
 
         $ ./run-test.sh
+
+
+Build the Documentation
++++++++++++++++++++++++
 
 Generate the documentation:
 
@@ -52,4 +96,21 @@ The above command will generate the documentation in HTML and it will place it u
 
 .. code-block:: shell
 
-    doc/sphinx/_build/html/
+    docs/sphinx/_build/html/
+
+.. rubric:: Footnotes
+
+.. [#f1]
+
+    Shapely 1.7 requires GEOS >=3.3, if you have a build message such as the one showed below:
+
+    .. code-block::
+
+        OSError: /path/lib/libgeos_c.so: cannot open shared object file: No such file or directory
+
+    You can instruct ``pip`` to look at the right place for header files when building Shapely:
+
+    .. code-block:: shell
+
+        $LD_LIBRARY_PATH="/usr/local/lib/" \
+        pip3 install shapely

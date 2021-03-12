@@ -8,6 +8,7 @@
 """Python Client Library for SampleDB."""
 
 import os
+
 from setuptools import find_packages, setup
 
 readme = open('README.rst').read()
@@ -16,6 +17,8 @@ history = open('CHANGES.rst').read()
 
 docs_require = [
     'Sphinx>=2.2',
+    'sphinx_rtd_theme',
+    'sphinx-copybutton',
 ]
 
 tests_require = [
@@ -29,8 +32,13 @@ tests_require = [
     'check-manifest>=0.40'
 ]
 
+examples_require = [
+    'matplotlib>=3.1',
+]
+
 extras_require = {
     'docs': docs_require,
+    'examples': examples_require,
     'tests': tests_require,
 }
 
@@ -42,10 +50,11 @@ setup_requires = [
 
 install_requires = [
     'requests>=2.20',
-    'Shapely>=1.6.4',
+    'Shapely>=1.7.1',
     'pandas>=0.24.0',
     'geopandas>=0.6.0',
     'Click>=7.0',
+    'Jinja2>=2.11.1',
 ]
 
 packages = find_packages()

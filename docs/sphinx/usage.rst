@@ -12,20 +12,20 @@ Running sample Client in the Command Line
 
 List the available datasets::
 
-    sample-cli --url 'https://brazildatacube.dpi.inpe.br/bdc/geoserver' --user 'user' datasets
+    sample-cli --url 'https://brazildatacube.dpi.inpe.br/bdc/geoserver' --user 'change-me' datasets
 
 The above command will return a list of dataset names as:
 
 .. code-block:: shell
 
-    ['BDC Sample Dataset - Test Area',
-     'Amostras Campo Verde MT (Campo Verde Database)',
-     'Insitu Mato Grosso State (Brazil) Land Use and Land Cover Samples 1.8K',
-     'Insitu Mato Grosso State (Brazil) Land Use and Land Cover Samples 2K']
+    ['bdc-test-areas-2018-V1',
+     'lapig-brasil-1985_2017-V1',
+     ...
+    ]
 
 Retrieve the information given a dataset name::
 
-    sample-cli --url 'https://brazildatacube.dpi.inpe.br/bdc/geoserver' --user 'user' describe-dataset 'BDC Sample Dataset - Test Area'
+    sample-cli --url 'https://brazildatacube.dpi.inpe.br/bdc/geoserver' --user 'change-me' describe-dataset  --dataset 'bdc-test-areas-2018-V1'
 
 The above command will return a JSON document as:
 
@@ -38,7 +38,9 @@ The above command will return a JSON document as:
      'end_date': '2019-08-31Z',
      'id': 6,
      'midias_table_name': None,
-     'name': 'area_bdc_all',
+     'name': 'Brazil Data Cube test areas',
+     'is_public': "t",
+     "identifier": "bdc-test-areas-2018"
      'observation_table_name': 'area_bdc_all_observations',
      'start_date': '2018-09-01Z',
      'updated_at': '2020-04-17T13:37:53.016Z',
@@ -47,7 +49,7 @@ The above command will return a JSON document as:
 
 Retrieve the metadata given a dataset name::
 
-    sample-cli --url 'https://brazildatacube.dpi.inpe.br/bdc/geoserver' --user 'user' dataset-metadata 'BDC Sample Dataset - Test Area'
+    sample-cli --url 'https://brazildatacube.dpi.inpe.br/bdc/geoserver' --user 'change-me' dataset-metadata --dataset 'bdc-test-areas-2018-V1'
 
 The above command will return a JSON document as:
 
@@ -113,11 +115,11 @@ The above command will return a JSON document as:
 
 Save a observation given a observation table name and a filename option (File path or file handle to write to)::
 
-    sample-cli --url 'https://brazildatacube.dpi.inpe.br/bdc/geoserver' --user 'reader' save-observations 'area_bdc_all_observations' --filename '/home/data/observation_name.shp'
+    sample-cli --url 'https://brazildatacube.dpi.inpe.br/bdc/geoserver' --user 'change-me' save-observations --dataset 'bdc-test-areas-2018-V1' --filename '/home/data/observation_name.shp'
 
 Save a observation given a observation table name and driver (The OGR format driver used to write the vector file). See all format type [#f1]_. ::
 
-    sample-cli --url 'https://brazildatacube.dpi.inpe.br/bdc/geoserver' --user 'reader' save-observations 'area_bdc_all_observations' --filename '/home/data/observation_name.geojson' --driver 'GeoJSON'
+    sample-cli --url 'https://brazildatacube.dpi.inpe.br/bdc/geoserver' --user 'change-me' save-observations 'area_bdc_all_observations' --filename '/home/data/observation_name.geojson' --driver 'GeoJSON'
 
 
 

@@ -7,6 +7,9 @@
 #
 """Python API client wrapper for SampleDB."""
 import geopandas as gpd
+import lccs
+from sample_db.config import Config
+from sample_db.models import Datasets
 from shapely.geometry import MultiPolygon, Point, Polygon
 
 from .dataset import Dataset
@@ -19,7 +22,7 @@ class SAMPLE:
 
     .. note::
         For more information about coverage definition, please, refer to
-        `Sample-DB <https://github.com/brazil-data-cube/sampledb>`_.
+        `Sample-DB <https://github.com/brazil-data-cube/sample-db>`_.
     """
 
     def __init__(self, **kwargs):
@@ -29,7 +32,7 @@ class SAMPLE:
             url (str): URL for the sample WFS.
             auth (dict): user and password.
         """
-        invalid_parameters = set(kwargs) - {"wfs", "auth"}
+        invalid_parameters = set(kwargs) - {"wfs", "auth", "lccs"}
 
         if invalid_parameters:
             raise AttributeError('invalid parameter(s): {}'.format(invalid_parameters))
@@ -50,6 +53,16 @@ class SAMPLE:
             else:
                 raise AttributeError('wfs must be a string')
 
+        self.__lccs_url = "https://brazildatacube.dpi.inpe.br/dev/lccs/"
+
+        if 'lccs' in kwargs:
+            if type(kwargs['wfs'] is str):
+                self.__lccs_url = kwargs['lccs']
+            else:
+                raise AttributeError('LCCS host must be a string')
+
+        self.__lccs_server = lccs.LCCS(self.__lccs_url)
+
     def list_feature(self):
         """Return a list of WFS feature.
 
@@ -62,29 +75,30 @@ class SAMPLE:
         """Describe Feature."""
         return self.__wfs.describe_feature(ft_name)
 
-    def _get_dataset(self, identifier_version):
+    def _get_dataset(self, identifier):
         """Get dataset metadata for the given dataset.
 
         Args:
-            identifier_version (str): The dataset key identifier-version.
+            identifier (str): The dataset identifier (name-version).
         Returns:
            dict: The coverage metadata as a dictionary.
         """
-        if not identifier_version:
+        if not identifier:
             raise AttributeError('Invalid Dataset')
 
-        identifier, version = identifier_version.split("-V", 2)
+        identifier, version = identifier.split("-V", 2)
 
-        cql_filter = 'identifier=\'{}\' AND version=\'{}\''.format(identifier, version)
+        cql_filter = 'name=\'{}\' AND version=\'{}\''.format(identifier, version)
 
-        features = self.__wfs.get_feature("sampledb:dataset", max_features=1, filter=cql_filter)
+        features = self.__wfs.get_feature(f"{Config.SAMPLEDB_SCHEMA}:{Datasets.__tablename__}", max_features=1,
+                                          filter=cql_filter)
 
         feature = features['features'][0]
 
-        return Dataset(self.__wfs, feature['properties'])
+        return Dataset(wfs=self.__wfs, data=feature['properties'], lccs=self.__lccs_server)
 
     def __getitem__(self, key):
-        """Get dataset identified by the key (identifier-version).
+        """Get dataset identified by the key (name-version).
 
         Returns:
             Dataset: A dataset object.
@@ -111,12 +125,12 @@ class SAMPLE:
         Returns:
           list: A list with the available dataset in service.
         """
-        features = self.__wfs.get_feature("sampledb:dataset")
+        features = self.__wfs.get_feature(f"{Config.SAMPLEDB_SCHEMA}:{Datasets.__tablename__}")
 
         result = list()
 
         for ft in features['features']:
-            result.append(f"{ft['properties']['identifier']}-V{ft['properties']['version']}")
+            result.append(f"{ft['properties']['name']}-V{ft['properties']['version']}")
 
         return result
 
@@ -141,7 +155,7 @@ class SAMPLE:
 
     @staticmethod
     def save_feature(filename: str, gdf: gpd.geodataframe.GeoDataFrame, driver: str = "ESRI Shapefile"):
-        """Save observations to file.
+        """Save dataset data to file.
 
         Args:
             filename (str): The path or filename.

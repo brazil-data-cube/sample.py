@@ -10,10 +10,16 @@
 Changes
 =======
 
-Version 0.2.0 (2021-04-14)
+Version 0.2.0 (2021-04-22)
 --------------------------
 
 - Add integration with Drone CI  (`#18 <https://github.com/brazil-data-cube/sample.py/issues/18>`_).
+
+- Add integration with LCCS.py  (`#23 <https://github.com/brazil-data-cube/sample.py/issues/23>`_).
+
+- Add metadata template  (`#24 <https://github.com/brazil-data-cube/sample.py/issues/24>`_).
+
+- Support for the SAMPLE-DB version 0.6.0 (`#21 <https://github.com/brazil-data-cube/sample.py/issues/21>`_).
 
 - Bug Fix: Error: pyproj.CRS not found (`#10 <https://github.com/brazil-data-cube/sample.py/issues/10>`_).
 

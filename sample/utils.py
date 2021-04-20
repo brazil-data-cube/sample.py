@@ -74,9 +74,3 @@ class Utils:
         """Render Jinja2 HTML template."""
         template = templateEnv.get_template(template_name)
         return template.render(**kwargs)
-
-    # @staticmethod
-    # def render_json(**kwargs):
-    #     template = jinja2.Template("""{{ matches |  to_nice_json(indent=2) }}""")
-    #
-    #     returnn template.render(matches=ds_meta)

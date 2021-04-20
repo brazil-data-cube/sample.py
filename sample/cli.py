@@ -43,9 +43,9 @@ def cli(config, url, lccs_url, user, password):
     config.url = url
     config.lccs_url = lccs_url
     if user and password:
-        config.service = SAMPLE(wfs=config.url, lccs_url=config.lccs_url, auth=(user, password))
+        config.service = SAMPLE(wfs=config.url, lccs=config.lccs_url, auth=(user, password))
     else:
-        config.service = SAMPLE(wfs=config.url, lccs_url=config.lccs_url)
+        config.service = SAMPLE(wfs=config.url, lccs=config.lccs_url)
 
 
 @cli.command()

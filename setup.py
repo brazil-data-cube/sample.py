@@ -56,7 +56,7 @@ install_requires = [
     'Click>=7.0',
     'Jinja2>=2.11.1',
     'lccs @ git+https://github.com/brazil-data-cube/lccs.py.git@v0.6.0',
-    'sample-db @ git+https://github.com/brazil-data-cube/sample-db.git@master#egg=sample-db',
+    'sample-db @ git+https://github.com/brazil-data-cube/sample-db.git@v0.6.0#egg=sample-db',
 ]
 
 packages = find_packages()

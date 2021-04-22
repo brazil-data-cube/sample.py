@@ -10,11 +10,20 @@
 Changes
 =======
 
-Version 0.2.0 (2021-X-x)
+Version 0.2.0 (2021-04-14)
 --------------------------
 
+- Add integration with Drone CI  (`#18 <https://github.com/brazil-data-cube/sample.py/issues/18>`_).
 
-- First experimental version.
+- Bug Fix: Error: pyproj.CRS not found (`#10 <https://github.com/brazil-data-cube/sample.py/issues/10>`_).
+
+- Bug Fix: Add support for multipoint (`#9 <https://github.com/brazil-data-cube/sample.py/issues/9>`_).
+
+- Command Line Interface (CLI).
+
+- Integration with Jupyter Environment.
+
+- Integration with GeoDataframe.
 
 - Documentation system based on Sphinx.
 
@@ -23,10 +32,6 @@ Version 0.2.0 (2021-X-x)
 - Package support through Setuptools.
 
 - Installation and use instructions.
-
-- Drone CI support.
-
-- Integration with Jupyter Environment
 
 - Source code versioning based on `Semantic Versioning 2.0.0 <https://semver.org/>`_.
 

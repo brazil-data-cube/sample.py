@@ -80,6 +80,21 @@ class Dataset(dict):
         return self['name']
 
     @property
+    def identifier(self):
+        """Return the dataset identifier."""
+        return self['identifier']
+
+    @property
+    def is_public(self):
+        """Return the dataset is_public."""
+        return self['is_public']
+
+    @property
+    def version(self):
+        """Return the dataset is_public."""
+        return self['version']
+
+    @property
     def metadata(self):
         """Return the dataset metadata."""
         return self.metadata_json

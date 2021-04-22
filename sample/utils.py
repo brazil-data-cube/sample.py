@@ -58,9 +58,11 @@ class Utils:
             else:
                 raise Exception('Unsupported geometry type.')
 
-            del item['properties']['bbox']
+            if 'bbox' in item['properties']:
+                del item['properties']['bbox']
 
             feature.update(item['properties'])
+
             fc['features'].append(feature)
 
         fc['crs'] = js['crs']

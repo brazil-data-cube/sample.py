@@ -62,18 +62,20 @@ class SAMPLE:
         """Describe Feature."""
         return self.__wfs.describe_feature(ft_name)
 
-    def _get_dataset(self, name):
-        """Get dataset metadata for the given dataset identified by its name.
+    def _get_dataset(self, identifier_version):
+        """Get dataset metadata for the given dataset.
 
         Args:
-            name (str): The dataset name identifier.
+            identifier_version (str): The dataset key identifier-version.
         Returns:
            dict: The coverage metadata as a dictionary.
         """
-        if not name:
-            raise AttributeError('Invalid Dataset Name')
+        if not identifier_version:
+            raise AttributeError('Invalid Dataset')
 
-        cql_filter = 'name=\'{}\''.format(name)
+        identifier, version = identifier_version.split("-V", 2)
+
+        cql_filter = 'identifier=\'{}\' AND version=\'{}\''.format(identifier, version)
 
         features = self.__wfs.get_feature("sampledb:dataset", max_features=1, filter=cql_filter)
 
@@ -82,7 +84,7 @@ class SAMPLE:
         return Dataset(self.__wfs, feature['properties'])
 
     def __getitem__(self, key):
-        """Get dataset whose name is identified by the key.
+        """Get dataset identified by the key (identifier-version).
 
         Returns:
             Dataset: A dataset object.
@@ -93,12 +95,12 @@ class SAMPLE:
             ValueError: If the response body is not a json document.
 
         Example:
-            Get a dataset object named ``BDC Sample Dataset - Test Area``:
+            Get a dataset object named ``bdc_mato_grosso_2017-2018-V001``:
             .. doctest::
                 :skipif: SAMPLE_EXAMPLE_URL is None
                 >>> from sample import *
                 >>> service = SAMPLE(SAMPLE_EXAMPLE_URL)
-                >>> service['BDC Sample Dataset - Test Area']
+                >>> service['bdc_mato_grosso_2017-2018-V001']
                 dataset...
         """
         return self._get_dataset(key)
@@ -107,14 +109,14 @@ class SAMPLE:
         """Return a list of all dataset available.
 
         Returns:
-          list: A list with the names of available dataset.
+          list: A list with the available dataset in service.
         """
         features = self.__wfs.get_feature("sampledb:dataset")
 
         result = list()
 
         for ft in features['features']:
-            result.append(ft['properties']['name'])
+            result.append(f"{ft['properties']['identifier']}-V{ft['properties']['version']}")
 
         return result
 
@@ -123,7 +125,7 @@ class SAMPLE:
         """Return a list of all dataset available.
 
         Returns:
-          list: A list with the names of available dataset.
+          list: A list with the available dataset in service.
         """
         return self._list_datasets()
 

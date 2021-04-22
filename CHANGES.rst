@@ -10,7 +10,7 @@
 Changes
 =======
 
-Version 0.2.0 (2021-04-22)
+Version 0.6.0 (2021-04-22)
 --------------------------
 
 - Add integration with Drone CI  (`#18 <https://github.com/brazil-data-cube/sample.py/issues/18>`_).

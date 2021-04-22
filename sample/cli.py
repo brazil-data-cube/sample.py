@@ -20,6 +20,7 @@ class Config:
     def __init__(self):
         """Initialize of Config decorator."""
         self.url = None
+        self.lccs_url = None
         self.auth = None
         self.service = None
 
@@ -30,18 +31,21 @@ pass_config = click.make_pass_decorator(Config, ensure=True)
 @click.group()
 @click.option('--url', type=click.STRING, default='https://brazildatacube.dpi.inpe.br/bdc/geoserver',
               help='The GeoServer address (an URL).')
+@click.option('--lccs_url', type=click.STRING, default='https://brazildatacube.dpi.inpe.br/dev/lccs',
+              help='The GeoServer address (an URL).')
 @click.option('--user', type=click.STRING, default=None, required=False,
               help='The user of server address.')
 @click.option('--password', prompt=True, hide_input=True, default="", help='The password of server address.')
 @click.version_option()
 @pass_config
-def cli(config, url, user, password):
+def cli(config, url, lccs_url, user, password):
     """Sample on command line."""
     config.url = url
+    config.lccs_url = lccs_url
     if user and password:
-        config.service = SAMPLE(wfs=config.url, auth=(user, password))
+        config.service = SAMPLE(wfs=config.url, lccs=config.lccs_url, auth=(user, password))
     else:
-        config.service = SAMPLE(wfs=config.url)
+        config.service = SAMPLE(wfs=config.url, lccs=config.lccs_url)
 
 
 @cli.command()
@@ -113,25 +117,25 @@ def dataset_metadata(config: Config, dataset, verbose):
               help='The OGR format driver used to write the vector file')
 @click.option('-v', '--verbose', is_flag=True, default=False)
 @pass_config
-def save_observations(config: Config, dataset, filename, driver, verbose):
-    """Save observations of a specific dataset."""
+def dataset_save(config: Config, dataset, filename, driver, verbose):
+    """Save dataset data of a specific dataset."""
     retval = config.service[dataset]
 
-    gdf = retval.observation
+    gdf = retval.data
 
     if verbose:
         click.secho(f'Server: {config.url}', bold=True, fg='black')
-        click.secho('\tSave dataset observation..',
+        click.secho('\tSave dataset data..',
                     bold=False, fg='black')
 
         config.service.save_feature(filename, gdf, driver)
 
-        click.secho(f'\t- Observation {dataset} saved in {filename}', bold=True, fg='green')
+        click.secho(f'\t- Saved {dataset} in {filename}', bold=True, fg='green')
 
         click.secho('\tFinished!', bold=False, fg='black')
 
     else:
         config.service.save_feature(filename, gdf, driver)
 
-        click.secho(f'Observation {dataset} saved in {filename}', fg='green')
+        click.secho(f'Saved {dataset} in {filename}', fg='green')
 

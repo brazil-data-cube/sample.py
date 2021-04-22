@@ -15,6 +15,6 @@ ds = service['LAPIG-Pontos-Visualmente-Inspecionados-Treinamento']
 
 print(ds)
 
-observation = ds.observation
+observation = ds.data
 
 observation.plot(marker='o', color='red', markersize=5, figsize=(20, 20))

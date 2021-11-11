@@ -9,7 +9,7 @@
 from typing import Union
 
 import geopandas as gpd
-from lccs import LCCS
+from lccs import LCCS, ClassificationSystem
 
 from .utils import Utils
 
@@ -53,97 +53,97 @@ class Dataset(dict):
             return None
 
     @property
-    def id(self):
+    def id(self) -> str:
         """Return the dataset id."""
         return self['id']
 
     @property
-    def classification_system_name(self):
+    def classification_system_name(self) -> str:
         """Return the dataset classification system id."""
         return self['classification_system_name']
 
     @property
-    def classification_system_id(self):
+    def classification_system_id(self) -> str:
         """Return the dataset classification system name."""
         return self['classification_system_id']
 
     @property
-    def classification_system_version(self):
+    def classification_system_version(self) -> str:
         """Return the dataset classification system version."""
         return self['classification_system_version']
 
-    def _get_classification_system(self):
+    def _get_classification_system(self) -> ClassificationSystem:
         """Return the classification system object."""
         system_id = f"{self['classification_system_name']}-{self['classification_system_version']}"
         return self.__lccs_server.classification_system(system_id)
 
     @property
-    def classification_system(self):
+    def classification_system(self) -> ClassificationSystem:
         """Return the classification system object."""
         return self._get_classification_system()
 
     @property
-    def collect_method(self):
+    def collect_method(self) -> str:
         """Return the dataset collect method name."""
         return self['collect_method_name']
 
     @property
-    def collect_method_id(self):
+    def collect_method_id(self) -> str:
         """Return the dataset collect method id."""
         return self['collect_method_id']
 
     @property
-    def description(self):
+    def description(self) -> str:
         """Return the dataset description."""
         return self['description']
 
     @property
-    def end_date(self):
+    def end_date(self) -> str:
         """Return the dataset end date."""
         return self['end_date']
 
     @property
-    def start_date(self):
+    def start_date(self) -> str:
         """Return the dataset start date."""
         return self['start_date']
 
     @property
-    def name(self):
+    def name(self) -> str:
         """Return the dataset name."""
         return self['name']
 
     @property
-    def title(self):
+    def title(self) -> str:
         """Return the dataset identifier."""
         return self['title']
 
     @property
-    def is_public(self):
+    def is_public(self) -> str:
         """Return the dataset is_public."""
         return self['is_public']
 
     @property
-    def version(self):
+    def version(self) -> str:
         """Return the dataset version."""
         return self['version']
 
     @property
-    def version_successor(self):
+    def version_successor(self) -> Union[int, None]:
         """Return the dataset version_successor."""
         return self['version_successor']
 
     @property
-    def version_predecessor(self):
+    def version_predecessor(self) -> Union[int, None]:
         """Return the dataset version_predecessor."""
         return self['version_predecessor']
 
     @property
-    def metadata(self):
+    def metadata(self) -> Union[DSMetada, None]:
         """Return the dataset metadata."""
         return self.metadata_json
 
     @property
-    def dataset_table_id(self):
+    def dataset_table_id(self) -> int:
         """Return the dataset table name."""
         return self['dataset_table_id']
 
@@ -167,11 +167,15 @@ class Dataset(dict):
         """Return the dataset updated_at date."""
         return self['number_of_features']
 
-    @property
-    def data(self):
+    def data(self, data_id: int = None, limit: int = None) -> gpd.GeoDataFrame:
         """Return the dataset observation dataframe."""
-        features = Utils._get(url=f'{self._dataset._url}/datasets/data',
-                              **dict(access_token=self._dataset._access_token, dataset_id=self.id, limit=self.number_of_features))
+        if data_id:
+            features = Utils._get(url=f'{self._dataset._url}/datasets/data',
+                                  **dict(access_token=self._dataset._access_token, dataset_id=self.id, data_id=data_id))
+        else:
+            lt = limit if limit else self.number_of_features
+            features = Utils._get(url=f'{self._dataset._url}/datasets/data',
+                                  **dict(access_token=self._dataset._access_token, dataset_id=self.id, limit=lt))
 
         return gpd.GeoDataFrame.from_features(features["features"])
 

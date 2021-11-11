@@ -101,11 +101,14 @@ def describe_dataset(config: Config, dataset_id, dataset_name, dataset_version, 
 @click.option('--dataset_version', default=None, type=click.STRING, required=False,
               help='The dataset version to return information.')
 @click.option('--filename', type=click.STRING, required=True, help='File path or file handle to write to')
+@click.option('--limit', default=None, type=click.INT,
+              help='The maximum number of results to return (page size). Defaults to None')
+@click.option('--page', default=None, type=click.INT, help='The page number of results..')
 @click.option('--driver', type=click.STRING, required=False, default='ESRI Shapefile',
               help='The OGR format driver used to write the vector file')
 @click.option('-v', '--verbose', is_flag=True, default=False)
 @pass_config
-def export_data(config: Config, dataset_id, dataset_name, dataset_version, filename, driver, verbose):
+def export_data(config: Config, dataset_id, dataset_name, dataset_version, limit, page, filename, driver, verbose):
     """Save dataset data of a specific dataset."""
     if dataset_id:
         retval = config.service.dataset(dataset_id=dataset_id)
@@ -116,7 +119,12 @@ def export_data(config: Config, dataset_id, dataset_name, dataset_version, filen
                     bold=True, fg='red')
         return
 
-    gdf = retval.data()
+    filter = {
+        'limit': limit,
+        'page': page
+    }
+
+    gdf = retval.data(filter=filter)
 
     if verbose:
         click.secho(f'Server: {config.url}', bold=True, fg='black')

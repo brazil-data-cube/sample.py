@@ -167,16 +167,21 @@ class Dataset(dict):
         """Return the dataset updated_at date."""
         return self['number_of_features']
 
-    def data(self, data_id: int = None, limit: int = None) -> gpd.GeoDataFrame:
+    def data(self, data_id: int = None, filter: dict = dict()) -> gpd.GeoDataFrame:
         """Return the dataset observation dataframe."""
-        if data_id:
-            features = Utils._get(url=f'{self._dataset._url}/datasets/data',
-                                  **dict(access_token=self._dataset._access_token, dataset_id=self.id, data_id=data_id))
-        else:
-            lt = limit if limit else self.number_of_features
-            features = Utils._get(url=f'{self._dataset._url}/datasets/data',
-                                  **dict(access_token=self._dataset._access_token, dataset_id=self.id, limit=lt))
+        url = f'{self._dataset._url}/datasets/data'
 
+        filter["access_token"] = self._dataset._access_token
+        filter["dataset_id"] = self.id
+
+        if data_id:
+            filter["data_id"] = data_id
+        else:
+            if 'limit' not in filter or filter["limit"] is None:
+                filter["limit"] = self.number_of_features
+
+        features = Utils._get(url=url,
+                              **filter)
         return gpd.GeoDataFrame.from_features(features["features"])
 
     def _repr_html_(self):

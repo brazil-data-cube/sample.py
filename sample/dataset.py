@@ -6,38 +6,48 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 #
 """A class that represents a Dataset in SampleDB."""
-
-import json
+from typing import Union
 
 import geopandas as gpd
-import pyproj
-from sample_db.config import Config
+from lccs import LCCS
 
 from .utils import Utils
+
+
+class DSMetada(dict):
+    """DSMetada Class."""
+
+    def __init__(self, data):
+        """Initialize instance with dictionary data.
+
+        :param data: Dict with class system metadata.
+        """
+        super(DSMetada, self).__init__(data or {})
+
+    def _repr_html_(self):
+        """HTML repr."""
+        return Utils.render_html('metadata.html', metadata=self)
 
 
 class Dataset(dict):
     """DataSet Class."""
 
-    def __init__(self, wfs, data, lccs):
+    def __init__(self, dataset, url, data, lccs):
         """Initialize instance with dictionary data.
 
         :param data: Dict with class system metadata.
         """
         super(Dataset, self).__init__(data or {})
+        #: Dataset: The associated Dataset.
+        self._dataset = dataset
         self.metadata_json = self.prepare_metadata()
-        self.__wfs = wfs
-        self.__lccs_server = lccs
+        self.__url = url
+        self.__lccs_server = LCCS(lccs)
 
-    def prepare_metadata(self):
+    def prepare_metadata(self) -> Union[None, DSMetada]:
         """Prepare dataset metadata."""
-        if self['metadata_json'] is not None:
-            m = json.loads(self['metadata_json'])
-
-            metadata_json = DSMetada(m)
-
-            del self['metadata_json']
-
+        if isinstance(self['metadata_json'], dict):
+            metadata_json = DSMetada(self['metadata_json'])
             return metadata_json
         else:
             return None
@@ -133,14 +143,9 @@ class Dataset(dict):
         return self.metadata_json
 
     @property
-    def dataset_table_name(self):
+    def dataset_table_id(self):
         """Return the dataset table name."""
-        return self['dataset_table_name']
-
-    @property
-    def user_name(self):
-        """Return the dataset user name (user who performed the insertion of the dataset)."""
-        return self['user_name']
+        return self['dataset_table_id']
 
     @property
     def user_id(self):
@@ -158,38 +163,18 @@ class Dataset(dict):
         return self['updated_at']
 
     @property
+    def number_of_features(self):
+        """Return the dataset updated_at date."""
+        return self['number_of_features']
+
+    @property
     def data(self):
         """Return the dataset observation dataframe."""
-        geometry_name = 'location'
+        features = Utils._get(url=f'{self._dataset._url}/datasets/data',
+                              **dict(access_token=self._dataset._access_token, dataset_id=self.id, limit=self.number_of_features))
 
-        dataset_table_name = f"{Config.SAMPLEDB_SCHEMA}:{self['dataset_table_name']}"
-
-        feature = Utils._get_feature(self.__wfs, name=dataset_table_name, geometry_name=geometry_name)
-
-        df_obs = gpd.GeoDataFrame.from_dict(feature['features'])
-
-        crs = feature['crs']['properties']
-        crs = pyproj.crs.CRS(crs['name']).to_epsg()
-
-        df_dataset_data = df_obs.set_geometry(col=geometry_name, crs=f'EPSG:{crs}')
-
-        return df_dataset_data
+        return gpd.GeoDataFrame.from_features(features["features"])
 
     def _repr_html_(self):
         """HTML repr."""
         return Utils.render_html('dataset.html', dataset=self)
-
-
-class DSMetada(dict):
-    """DSMetada Class."""
-
-    def __init__(self, data):
-        """Initialize instance with dictionary data.
-
-        :param data: Dict with class system metadata.
-        """
-        super(DSMetada, self).__init__(data or {})
-
-    def _repr_html_(self):
-        """HTML repr."""
-        return Utils.render_html('metadata.html', metadata=self)

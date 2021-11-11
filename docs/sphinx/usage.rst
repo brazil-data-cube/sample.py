@@ -12,115 +12,43 @@ Running sample Client in the Command Line
 
 List the available datasets::
 
-    sample-cli --url 'https://brazildatacube.dpi.inpe.br/bdc/geoserver' --user 'change-me' datasets
+    sample-cli --url 'http://127.0.0.1:5000/' --access-token 'change-me' datasets
 
-The above command will return a list of dataset names as:
+The above command will return a list of dataset names as::
 
-.. code-block:: shell
-
-    ['bdc-test-areas-2018-V1',
-     'lapig-brasil-1985_2017-V1',
-     ...
-    ]
+    {'id': 4, 'name': 'bdc-go-test-area', 'version': '1'}
+    {'id': 3, 'name': 'bdc-ba-test-area', 'version': '1'}
+    {'id': 6, 'name': 'bdc-all-test-area', 'version': '1'}
+    {'id': 3, 'name': 'bdc-ba-test-area', 'version': '1'}
 
 Retrieve the information given a dataset name::
 
-    sample-cli --url 'https://brazildatacube.dpi.inpe.br/bdc/geoserver' --user 'change-me' describe-dataset  --dataset 'bdc-test-areas-2018-V1'
+    sample-cli --url 'http://127.0.0.1:5000/' --access-token 'change-me' describe-dataset  --dataset_id 3
 
-The above command will return a JSON document as:
+The above command will return a JSON document as::
 
-.. code-block:: shell
-
-    {'classification_system_name': 'BDC',
-     'collect_method': 'VISUAL',
-     'created_at': '2020-04-17T13:37:53.016Z',
-     'description': 'Brazil Data Cube samples of study areas',
-     'end_date': '2019-08-31Z',
-     'id': 6,
-     'midias_table_name': None,
-     'name': 'Brazil Data Cube test areas',
-     'is_public': "t",
-     "identifier": "bdc-test-areas-2018"
-     'observation_table_name': 'area_bdc_all_observations',
-     'start_date': '2018-09-01Z',
-     'updated_at': '2020-04-17T13:37:53.016Z',
-     'user_name': 'Fabiana Zioti',
-     'version': '1'}
-
-Retrieve the metadata given a dataset name::
-
-    sample-cli --url 'https://brazildatacube.dpi.inpe.br/bdc/geoserver' --user 'change-me' dataset-metadata --dataset 'bdc-test-areas-2018-V1'
-
-The above command will return a JSON document as:
-
-.. code-block:: shell
-
-    {'agency': 'INPE',
-     'contributors': [{'@type': 'Person',
-                       'familyName': 'Picoli',
-                       'givenName': 'Michelle'},
-                      {'@type': 'Person',
-                       'familyName': 'Simoes',
-                       'givenName': 'Rolf'},
-                      {'@type': 'Person',
-                       'familyName': 'Chaves',
-                       'givenName': 'Michel'}],
-     'creators': [{'@type': 'Person',
-                   'familyName': 'Picoli',
-                   'givenName': 'Michelle'},
-                  {'@type': 'Person', 'familyName': 'Simoes', 'givenName': 'Rolf'},
-                  {'@type': 'Person',
-                   'familyName': 'Chaves',
-                   'givenName': 'Michel'}],
-     'dates': [{'date': '2019', 'dateType': 'Issued'}],
-     'descriptions': [{'description': 'This dataset include samples for the three '
-                                      'test sites used by the Brazilian Data Cube '
-                                      'project.',
-                       'descriptionType': 'Abstract',
-                       'lang': 'en'}],
-     'formats': [],
-     'fundingReferences': [{'awardNumber': '17.2.0536.1',
-                            'awardTitle': 'Brazil Data Cube project',
-                            'funderName': 'Amazon Fund through the financial '
-                                          'collaboration of the Brazilian '
-                                          'Development Bank (BNDES), and the '
-                                          'Foundation for Science, Technology and '
-                                          'Space Applications (FUNCATE) (process '
-                                          'number 17.2.0536.1, Brazil Data Cube '
-                                          'project)'},
-                           {'awardNumber': '88887.351470/2019-00',
-                            'funderName': 'Coordination for the Improvement of '
-                                          'Higher Education Personnel (CAPES) '
-                                          '(process number 88887.351470/2019-00)'}],
-         'geoLocations': [],
-         'id': 'test_sites_bdc',
-         'language': 'en',
-         'rightsList': [{'rights': 'Creative Commons Attribution 4.0 International',
-                         'rightsUri': 'https://creativecommons.org/licenses/by/4.0/'}],
-         'schemaVersion': 'http://datacite.org/schema/kernel-4',
-         'sizes': [],
-         'state': 'findable',
-         'subjects': [{'lang': 'en', 'subject': 'Brazil Data Cube'},
-                      {'lang': 'en', 'subject': 'sutdy areas'},
-                      {'lang': 'en', 'subject': 'Cerrado'}],
-         'titles': [{'lang': 'en', 'title': 'Brazil Data Cube samples of study areas'}],
-         'types': {'bibtex': 'misc',
-                   'citeproc': 'dataset',
-                   'resourceType': 'Dataset',
-                   'resourceTypeGeneral': 'Dataset',
-                   'ris': 'DATA',
-                   'schemaOrg': 'Dataset'},
-         'version': '1.0'}
-
+    {
+        'classification_system_id': 1,
+        'classification_system_name': 'BDC',
+        'classification_system_version': '1.0',
+        'collect_method_id': 2,
+        'collect_method_name': 'VISUAL',
+        'metadata_json': {'agency': 'INPE', 'contributors': .....},
+        'end_date': '2019-08-31T00:00:00Z',
+        'id': 3,
+        'is_public': True,
+        'version': '1',
+        .....
+     }
 
 Save a observation given a observation table name and a filename option (File path or file handle to write to)::
 
-    sample-cli --url 'https://brazildatacube.dpi.inpe.br/bdc/geoserver' --user 'change-me' save-observations --dataset 'bdc-test-areas-2018-V1' --filename '/home/data/observation_name.shp'
+    sample-cli --url 'http://127.0.0.1:5000/' --access-token 'change-me' export-data  --dataset_id 3 --filename '/home/data/observation_name.shp'
+
 
 Save a observation given a observation table name and driver (The OGR format driver used to write the vector file). See all format type [#f1]_. ::
 
-    sample-cli --url 'https://brazildatacube.dpi.inpe.br/bdc/geoserver' --user 'change-me' save-observations 'area_bdc_all_observations' --filename '/home/data/observation_name.geojson' --driver 'GeoJSON'
-
+    sample-cli --url 'http://127.0.0.1:5000/' --access-token 'change-me' export-data  --dataset_id 3 --filename '/home/data/observation_name.shp' --driver 'GeoJSON'
 
 
 .. rubric:: Footnotes

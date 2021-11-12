@@ -18,7 +18,7 @@ from pkg_resources import resource_filename, resource_string
 import sample
 from sample.cli import Config
 
-url = os.environ.get('SAMPLE_SERVER_URL', 'http://localhost:5000/wlts')
+url = os.environ.get('SAMPLE_SERVER_URL', 'http://localhost:5000/')
 match_url = re.compile(url)
 
 

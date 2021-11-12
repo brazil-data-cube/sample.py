@@ -1,0 +1,26 @@
+{
+  "features": [
+    {
+      "geometry": {
+        "coordinates": [
+          -49.827120615,
+          -17.713173444
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "class_id": 24,
+        "class_name": "Agriculture",
+        "collection_date": null,
+        "created_at": null,
+        "end_date": "2019-08-31T00:00:00Z",
+        "id": 1,
+        "start_date": "2018-09-01T00:00:00Z",
+        "updated_at": null,
+        "user_id": 1
+      },
+      "type": "Feature"
+    }
+  ],
+  "type": "FeatureCollection"
+}

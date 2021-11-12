@@ -1,0 +1,127 @@
+{
+  "classification_system_id": 1,
+  "classification_system_name": "BDC",
+  "classification_system_version": "1.0",
+  "collect_method_id": 2,
+  "collect_method_name": "VISUAL",
+  "dataset_table_id": 648621,
+  "description": "Brazil Data Cube samples of study areas",
+  "end_date": "2019-08-31T00:00:00Z",
+  "id": 4,
+  "is_public": true,
+  "metadata_json": {
+    "agency": "INPE",
+    "contributors": [
+      {
+        "@type": "Person",
+        "familyName": "Picoli",
+        "givenName": "Michelle"
+      },
+      {
+        "@type": "Person",
+        "familyName": "Simoes",
+        "givenName": "Rolf"
+      },
+      {
+        "@type": "Person",
+        "familyName": "Chaves",
+        "givenName": "Michel"
+      }
+    ],
+    "creators": [
+      {
+        "@type": "Person",
+        "familyName": "Picoli",
+        "givenName": "Michelle"
+      },
+      {
+        "@type": "Person",
+        "familyName": "Simoes",
+        "givenName": "Rolf"
+      },
+      {
+        "@type": "Person",
+        "familyName": "Chaves",
+        "givenName": "Michel"
+      }
+    ],
+    "dates": [
+      {
+        "date": "2019",
+        "dateType": "Issued"
+      }
+    ],
+    "descriptions": [
+      {
+        "description": "This dataset include samples for the one tile in Goias of the test sites used by the Brazilian Data Cube project.",
+        "descriptionType": "Abstract",
+        "lang": "en"
+      }
+    ],
+    "formats": [],
+    "fundingReferences": [
+      {
+        "awardNumber": "17.2.0536.1",
+        "awardTitle": "Brazil Data Cube project",
+        "funderName": "Amazon Fund through the financial collaboration of the Brazilian Development Bank (BNDES), and the Foundation for Science, Technology and Space Applications (FUNCATE) (process number 17.2.0536.1, Brazil Data Cube project)"
+      },
+      {
+        "awardNumber": "88887.351470/2019-00",
+        "funderName": "Coordination for the Improvement of Higher Education Personnel (CAPES) (process number 88887.351470/2019-00)"
+      }
+    ],
+    "geoLocations": [],
+    "id": "area_bdc_go",
+    "language": "en",
+    "rightsList": [
+      {
+        "rights": "Creative Commons Attribution 4.0 International",
+        "rightsUri": "https://creativecommons.org/licenses/by/4.0/"
+      }
+    ],
+    "schemaVersion": "http://datacite.org/schema/kernel-4",
+    "sizes": [],
+    "state": "findable",
+    "subjects": [
+      {
+        "lang": "en",
+        "subject": "Brazil Data Cube"
+      },
+      {
+        "lang": "en",
+        "subject": "sutdy areas"
+      },
+      {
+        "lang": "en",
+        "subject": "Cerrado"
+      },
+      {
+        "lang": "en",
+        "subject": "Goias"
+      }
+    ],
+    "titles": [
+      {
+        "lang": "en",
+        "title": "Brazil Data Cube samples of study areas"
+      }
+    ],
+    "types": {
+      "bibtex": "misc",
+      "citeproc": "dataset",
+      "resourceType": "Dataset",
+      "resourceTypeGeneral": "Dataset",
+      "ris": "DATA",
+      "schemaOrg": "Dataset"
+    },
+    "version": "1.0"
+  },
+  "name": "bdc-go-test-area",
+  "number_of_features": 702,
+  "start_date": "2018-09-01T00:00:00Z",
+  "title": "Brazil Data Cube Goias Test Area",
+  "user_id": 1,
+  "version": "1",
+  "version_predecessor": null,
+  "version_successor": null
+}

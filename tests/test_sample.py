@@ -18,7 +18,7 @@ from pkg_resources import resource_filename, resource_string
 import sample
 from sample.cli import Config
 
-url = os.environ.get('SAMPLE_SERVER_URL', 'http://localhost:5000/')
+url = os.environ.get('SAMPLE_SERVER_URL', 'http://localhost:5000')
 match_url = re.compile(url)
 
 
@@ -127,3 +127,45 @@ class TestSample:
             observations = ds.data(data_id=1)
 
             assert type(observations) == gpd.GeoDataFrame
+
+
+class TestCli:
+    def test_datasets(self, sample_objects, requests_mock, runner, config_obj):
+        for k in sample_objects:
+            requests_mock.get(match_url, json=sample_objects[k]['list_datasets.json'],
+                              status_code=200,
+                              headers={'content-type': 'application/json'})
+
+            result = runner.invoke(sample.cli.datasets, obj=config_obj)
+
+            assert result.exit_code == 0
+            assert 'id' in result.output
+            assert 'name' in result.output
+
+    def test_describe(self, sample_objects, requests_mock, runner, config_obj):
+        for k in sample_objects:
+            requests_mock.get(re.compile('https://brazildatacube.dpi.inpe.br/lccs/classification_systems'),
+                              real_http=True)
+            requests_mock.get(match_url, json=sample_objects[k]['describe_dataset.json'],
+                              status_code=200,
+                              headers={'content-type': 'application/json'})
+
+            result = runner.invoke(sample.cli.describe_dataset, ['--dataset_id', '4'], obj=config_obj)
+
+            assert result.exit_code == 0
+            assert 'classification_system_id' in result.output
+            assert 'classification_system_name' in result.output
+            assert 'classification_system_version' in result.output
+            assert 'collect_method_id' in result.output
+            assert 'collect_method_name' in result.output
+            assert 'end_date' in result.output
+            assert 'start_date' in result.output
+            assert 'id' in result.output
+            assert 'is_public' in result.output
+            assert 'version' in result.output
+
+
+if __name__ == '__main__':
+    import pytest
+
+    pytest.main(['--color=auto', '--no-cov'])

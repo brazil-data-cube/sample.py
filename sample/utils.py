@@ -44,6 +44,24 @@ class Utils:
         return response.json()
 
     @staticmethod
+    def _post(url, data=None, json=None, files=None, header=None):
+        """Request post method."""
+        response = requests.post(url, data=data, files=files, json=json, headers=header)
+
+        response.raise_for_status()
+
+        return response.json()
+
+    @staticmethod
+    def _delete(url, params=None):
+        """Request delete method."""
+        response = requests.delete(url, params=params)
+
+        response.raise_for_status()
+
+        return response
+
+    @staticmethod
     def render_html(template_name, **kwargs):
         """Render Jinja2 HTML template."""
         template = templateEnv.get_template(template_name)

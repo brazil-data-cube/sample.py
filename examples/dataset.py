@@ -9,7 +9,7 @@
 """This example shows how to retrieve and plot a dataset and observations."""
 from sample import *
 
-service = SAMPLE(url='http://127.0.0.1:5001/', access_token='0itRKnWR0qsxrSa0WB59Fydozbb93FRuaWXakCldZ3')
+service = SAMPLE(url='http://127.0.0.1:5000/', access_token='change-me')
 
 ds = service.dataset(dataset_id=1)
 

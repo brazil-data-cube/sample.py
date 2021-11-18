@@ -42,9 +42,11 @@ class SAMPLE:
         :returns: Collection description.
         :rtype: dict
         """
-        return Utils._get(
-            f'{self._url}/datasets?dataset_id={dataset_id}&dataset_name={dataset_name}&dataset_version={dataset_version}',
-            **dict(access_token=self._access_token))
+        url = f'{self._url}/datasets?'
+
+        url += f'dataset_id={dataset_id}' if dataset_id else f'dataset_name={dataset_name}&dataset_version={dataset_version}'
+
+        return Utils._get(url, **dict(access_token=self._access_token))
 
     def dataset(self, dataset_id: int = None, dataset_name: str = None, dataset_version: str = None) -> Dataset:
         """Return the given collection.

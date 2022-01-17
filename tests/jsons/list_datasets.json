@@ -1,0 +1,19 @@
+{
+  "datasets": [
+    {
+      "id": 4,
+      "name": "bdc-go-test-area",
+      "version": "1"
+    },
+    {
+      "id": 6,
+      "name": "bdc-all-test-area",
+      "version": "1"
+    },
+    {
+      "id": 3,
+      "name": "bdc-ba-test-area",
+      "version": "1"
+    }
+  ]
+}

@@ -113,14 +113,14 @@ class SAMPLE:
             yield self.dataset(dataset["id"])
 
     def __str__(self) -> str:
-        """Return the string representation of the SAMPLEDB object."""
-        text = f'SAMPLEDB:\n\tURL: {self.url}'
+        """Return the string representation of the SAMPLE object."""
+        text = f'SAMPLE:\n\tURL: {self.url}'
 
         return text
 
     def __repr__(self) -> str:
-        """Return the SAMPLEDB object representation."""
-        text = f'sampledb(url="{self.url}")'
+        """Return the SAMPLE object representation."""
+        text = f'sample(url="{self.url}")'
 
         return text
 

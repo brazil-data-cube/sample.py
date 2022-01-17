@@ -142,3 +142,66 @@ def export_data(config: Config, dataset_id, dataset_name, dataset_version, limit
 
         click.secho(f'Saved dataset in {filename}', fg='green')
 
+
+@cli.command()
+@click.option('--name', type=click.STRING, required=True, help='The dataset name.')
+@click.option('--title', type=click.STRING, required=True, help='The dataset title')
+@click.option('--version', type=click.STRING, required=True, help='The dataset version.')
+@click.option('--description', type=click.STRING, required=True, help='The dataset description.')
+@click.option('--start_date', type=click.STRING, required=True, help='The dataset start date.')
+@click.option('--version_predecessor', type=click.STRING, required=False, help='The dataset version predecessor.', default=None)
+@click.option('--version_successor', type=click.STRING, required=False, help='The dataset version successor.', default=None)
+@click.option('--end_date', type=click.STRING, required=True, help='The dataset end date.')
+@click.option('--classification_system_id', type=click.STRING, required=True,
+              help='The dataset classification system id.')
+@click.option('--collect_method_id', type=click.STRING, required=True, help='The dataset collect method id.')
+@click.option('--public/--no-public', required=True, default=False, help='Is this dataset public?.')
+@click.option('--metadata', type=click.Path(exists=True, readable=True), help='A JSON metadata file.',
+              required=False)
+@click.option('-v', '--verbose', is_flag=True, default=False)
+@pass_config
+def add_dataset(config: Config, name, metadata, start_date, end_date, classification_system_id, collect_method_id,
+                public, version, title, description, version_predecessor, version_successor, verbose):
+    """Add a new dataset."""
+    import json
+
+    metadata_file = None
+
+    if metadata:
+        with open(metadata, "r") as f:
+            metadata_file = json.load(f)
+
+    if verbose:
+        click.secho(f'Server: {config.url}', bold=True, fg='black')
+        click.secho('\tAdding new classification system ... ', bold=False, fg='black')
+
+    config.service.add_dataset(name=name, metadata=metadata_file, start_date=start_date, end_date=end_date,
+                               classification_system_id=classification_system_id,
+                               collect_method_id=collect_method_id, is_public=public, version=version, title=title,
+                               description=description, version_predecessor=version_predecessor,
+                               version_successor=version_successor, )
+
+    click.secho('\tFinished!', bold=False, fg='black')
+
+
+@cli.command()
+@click.option('--dataset_id', type=click.INT, required=False, help='The dataset id.')
+@click.option('--dataset_name', type=click.STRING, required=False, help='The dataset name.')
+@click.option('--dataset_version', type=click.STRING, required=False, help='The dataset version.')
+@click.option('--samples', type=click.Path(exists=True, readable=True), required=False,
+              default=None,help='Mappings used for location columns in file.')
+@click.option('-v', '--verbose', is_flag=True, default=False)
+@pass_config
+def insert_dataset_data(config: Config, dataset_id, dataset_name, dataset_version, samples, verbose):
+    """Insert data into dataset."""
+    import json
+
+    with open(samples, "r") as f:
+        sample_file = json.load(f)
+
+    if verbose:
+        click.secho(f'Server: {config.url}', bold=True, fg='black')
+        click.secho('\tAdding new classification system ... ', bold=False, fg='black')
+
+    config.service.add_dataset_data(dataset_id=dataset_id, dataset_name=dataset_name, dataset_version=dataset_version,
+                                    samples=sample_file)

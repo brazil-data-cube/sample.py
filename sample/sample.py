@@ -42,9 +42,11 @@ class SAMPLE:
         :returns: Collection description.
         :rtype: dict
         """
-        return Utils._get(
-            f'{self._url}/datasets?dataset_id={dataset_id}&dataset_name={dataset_name}&dataset_version={dataset_version}',
-            **dict(access_token=self._access_token))
+        url = f'{self._url}/datasets?'
+
+        url += f'dataset_id={dataset_id}' if dataset_id else f'dataset_name={dataset_name}&dataset_version={dataset_version}'
+
+        return Utils._get(url, **dict(access_token=self._access_token))
 
     def dataset(self, dataset_id: int = None, dataset_name: str = None, dataset_version: str = None) -> Dataset:
         """Return the given collection.
@@ -91,6 +93,60 @@ class SAMPLE:
             driver (str): Drive (type) of output file.
         """
         gdf.to_file(filename, encoding="utf-8", driver=driver)
+
+    def add_dataset(self, name: str, title: str, description: dict, start_date: str, end_date: str,
+                    classification_system_id: int, is_public: bool, collect_method_id: str, version: str,
+                    version_predecessor: int = None, version_successor: int = None,
+                    metadata: dict = None) -> dict:
+        """Add a new dataset."""
+        url = f'{self._url}/datasets'
+        header = {"x-api-key": self._access_token}
+
+        data = dict()
+        data["name"] = name
+        data["title"] = title
+        data["version"] = version
+        data["description"] = description
+        data["start_date"] = start_date
+        data["end_date"] = end_date
+        data["classification_system_id"] = classification_system_id
+        data["is_public"] = is_public
+        data["collect_method_id"] = collect_method_id
+
+        if metadata:
+            data["metadata"] = metadata
+
+        if version_predecessor:
+            data["version_predecessor"] = version_predecessor
+
+        if version_successor:
+            data["version_successor"] = version_successor
+
+        try:
+            retval = Utils._post(url, json=data, header=header)
+        except RuntimeError as e:
+            raise ValueError(f'Could not insert dataset {title}!')
+
+        return retval
+
+    def add_dataset_data(self,  samples: dict, dataset_id: int = None, dataset_name: str = None, dataset_version: str = None) -> dict:
+        """Add a new dataset."""
+        url = f'{self._url}/datasets/data'
+        if dataset_id:
+            url += f"?dataset_id={dataset_id}"
+        elif dataset_name and dataset_version:
+            url += f"?dataset_name={dataset_name}&dataset_version={dataset_version}"
+        else:
+            raise ValueError(f'You must inform the dataset!')
+
+        header = {"x-api-key": self._access_token}
+
+        try:
+            retval = Utils._post(url, json=samples, header=header)
+        except RuntimeError as e:
+            raise ValueError(f'Could not insert data into dataset!')
+
+        return retval
 
     @property
     def url(self) -> str:

@@ -50,6 +50,24 @@ Save a observation given a observation table name and driver (The OGR format dri
 
     sample-cli --url 'http://127.0.0.1:5000/' --access-token 'change-me' export-data  --dataset_id 3 --filename '/home/data/observation_name.shp' --driver 'GeoJSON'
 
+Create new dataset::
+
+    sample-cli --url 'http://127.0.0.1:5000/' --access-token 'change-me' add-dataset \
+                --name 'bdc-dataset' \
+                --title 'Brazil Data Cube Dataset' \
+                --description "Description of dataset" \
+                --version '1' \
+                --classification_system_id 1 \
+                --collect_method_id 2 \
+                --start_date '2017-07-01' \
+                --end_date '2018-08-31'
+
+Insert data into dataset::
+
+    sample-cli --url 'http://127.0.0.1:5001/' --access-token 'change-me' insert-dataset-data \
+                --dataset_id 20 \
+                --samples examples/add_sample.json
+
 
 .. rubric:: Footnotes
 

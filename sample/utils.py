@@ -7,9 +7,8 @@
 #
 """Utility functions for SampleDB library."""
 import jinja2
+import requests
 from pkg_resources import resource_filename
-from shapely.geometry import (LineString, MultiPoint, MultiPolygon, Point,
-                              Polygon)
 
 templateLoader = jinja2.FileSystemLoader(searchpath=resource_filename(__name__, 'templates/'))
 templateEnv = jinja2.Environment(loader=templateLoader)
@@ -19,55 +18,30 @@ class Utils:
     """Utils SampleDB object."""
 
     @staticmethod
-    def _get_feature(wfs, **kwargs):
-        """Get feature using wfs and return the result as a JSON document."""
-        invalid_parameters = set(kwargs) - {"name", "geometry_name"}
+    def _get(url, **params):
+        """Query the Sample service using HTTP GET verb and return the result as a JSON document.
 
-        if invalid_parameters:
-            raise AttributeError('invalid parameter(s): {}'.format(invalid_parameters))
+        :param url: The URL to query must be a valid Sample endpoint.
+        :type url: str
 
-        js = wfs.get_feature(kwargs['name'])
+        :param params: (optional) Dictionary, list of tuples or bytes to send
+        in the query string for the underlying `Requests`.
 
-        fc = dict()
+        :type params: dict
+        :rtype: dict
 
-        fc['features'] = []
+        :raises ValueError: If the response body does not contain a valid json.
+        """
+        response = requests.get(url, params=params)
 
-        for item in js['features']:
+        response.raise_for_status()
 
-            if item['geometry']['type'] == 'Point':
-                feature = {kwargs['geometry_name']: Point(item['geometry']['coordinates'][0],
-                                                          item['geometry']['coordinates'][1])}
-            elif item['geometry']['type'] == 'MultiPoint':
-                points = []
-                for point in item['geometry']['coordinates']:
-                    points += [Point(point)]
-                feature = {kwargs['geometry_name']: MultiPoint(points)}
+        content_type = response.headers.get('content-type')
 
-            elif item['geometry']['type'] == 'LineString':
-                feature = {kwargs['geometry_name']: LineString(item['geometry']['coordinates'])}
+        if content_type.count('application/json') == 0:
+            raise ValueError('HTTP response is not JSON: Content-Type: {}'.format(content_type))
 
-            elif item['geometry']['type'] == 'MultiPolygon':
-                polygons = []
-                for polygon in item['geometry']['coordinates']:
-                    polygons += [Polygon(lr) for lr in polygon]
-                feature = {kwargs['geometry_name']: MultiPolygon(polygons)}
-
-            elif item['geometry']['type'] == 'Polygon':
-                feature = {kwargs['geometry_name']: Polygon(item['geometry']['coordinates'][0])}
-
-            else:
-                raise Exception('Unsupported geometry type.')
-
-            if 'bbox' in item['properties']:
-                del item['properties']['bbox']
-
-            feature.update(item['properties'])
-
-            fc['features'].append(feature)
-
-        fc['crs'] = js['crs']
-
-        return fc
+        return response.json()
 
     @staticmethod
     def render_html(template_name, **kwargs):

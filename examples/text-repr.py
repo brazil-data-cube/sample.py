@@ -10,7 +10,7 @@
 
 from sample import *
 
-service = SAMPLE('https://brazildatacube.dpi.inpe.br/bdc/geoserver', auth=("user", "password"))
+service = SAMPLE(url='http://127.0.0.1:5000/', access_token='change-me')
 
 print(service)
 print(str(service))

@@ -9,12 +9,16 @@
 """This example shows how to retrieve and plot a dataset and observations."""
 from sample import *
 
-service = SAMPLE('https://brazildatacube.dpi.inpe.br/bdc/geoserver', auth=("user", "password"))
+service = SAMPLE(url='http://127.0.0.1:5000/', access_token='change-me')
 
-ds = service['LAPIG-Pontos-Visualmente-Inspecionados-Treinamento']
+ds = service.dataset(dataset_id=1)
 
 print(ds)
 
-observation = ds.data
+observations = ds.data()
+print(observations.dtypes)
 
-observation.plot(marker='o', color='red', markersize=5, figsize=(20, 20))
+print(observations.head())
+
+observation = ds.data(data_id=1)
+print(observation.head())

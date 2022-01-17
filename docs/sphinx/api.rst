@@ -19,6 +19,5 @@ Python Client Library for Sample Database Model - API
 
     sample
     dataset
-    wfs
     utils
     data

@@ -55,8 +55,7 @@ install_requires = [
     'geopandas>=0.6.0',
     'Click>=7.0',
     'Jinja2>=2.11.1',
-    'lccs @ git+https://github.com/brazil-data-cube/lccs.py.git@v0.6.0',
-    'sample-db @ git+https://github.com/brazil-data-cube/sample-db.git@v0.6.0#egg=sample-db',
+    'lccs @ git+https://github.com/brazil-data-cube/lccs.py.git@v0.8.0',
 ]
 
 packages = find_packages()

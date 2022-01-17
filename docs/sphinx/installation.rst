@@ -20,7 +20,7 @@ Pre-Requirements
 
 - `Geopandas <https://geopandas.org/>`_  GeoPandas is an open source project to make working with geospatial data in python easier.
 
-- `SAMPLE-DB <https://github.com/brazil-data-cube/sample-db>`_  Sample Database Model.
+- `LCCS.py <https://github.com/brazil-data-cube/lccs.py>`_  Python Client for Land Cover Classification System Service.
 
 Please, read the instructions below in order to install ``sample.py``.
 

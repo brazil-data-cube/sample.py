@@ -4,7 +4,7 @@
     <li><b>Datasets:</b></li>
     <ul>
     {% for ds in datasets -%}
-        <li>{{ ds }}</li>
+        <li>ID: {{ ds.id }} Name: {{ ds.name }} Version: {{ ds.version }}</li>
     {%- endfor %}
     </ul>
 </ul>

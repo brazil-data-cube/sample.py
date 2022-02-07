@@ -10,6 +10,15 @@
 Changes
 =======
 
+Version 0.8.0 (2022-02-07)
+--------------------------
+
+- Change geoserver data consumption to use the sample-ws service (`#28 <https://github.com/brazil-data-cube/sample.py/issues/28>`_).
+- Add tests (`#27 <https://github.com/brazil-data-cube/sample.py/issues/27>`_).
+- Update and improve documentation (`#29 <https://github.com/brazil-data-cube/sample.py/issues/29>`_).
+- Update command line interface (`#30 <https://github.com/brazil-data-cube/sample.py/issues/30>`_).
+- Update Jinja template: Add start date and end date information of dataset. (`#34 <https://github.com/brazil-data-cube/sample.py/issues/34>`_).
+
 Version 0.6.0 (2021-04-22)
 --------------------------
 

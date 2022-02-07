@@ -62,7 +62,7 @@ class SAMPLE:
             ds_metadata = self._describe_dataset(dataset_id, dataset_name, dataset_version)
         except requests.HTTPError as e:
             raise KeyError(f'Could not retrieve information for dataset!')
-        return Dataset(self, url=self._url, data=ds_metadata, lccs=self._lccs_url)
+        return Dataset(self, url=self._url, data=ds_metadata, lccs=self._lccs_url, token=self._access_token)
 
     def _list_datasets(self) -> List[dict]:
         """Return a list of all dataset available.

@@ -32,7 +32,7 @@ class DSMetada(dict):
 class Dataset(dict):
     """DataSet Class."""
 
-    def __init__(self, dataset, url, data, lccs):
+    def __init__(self, dataset, url, data, lccs, token):
         """Initialize instance with dictionary data.
 
         :param data: Dict with class system metadata.
@@ -42,7 +42,7 @@ class Dataset(dict):
         self._dataset = dataset
         self.metadata_json = self.prepare_metadata()
         self.__url = url
-        self.__lccs_server = LCCS(lccs)
+        self.__lccs_server = LCCS(lccs, access_token=token)
 
     def prepare_metadata(self) -> Union[None, DSMetada]:
         """Prepare dataset metadata."""

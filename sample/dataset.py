@@ -32,7 +32,7 @@ class DSMetada(dict):
 class Dataset(dict):
     """DataSet Class."""
 
-    def __init__(self, dataset, url, data, lccs, token):
+    def __init__(self, dataset, url, data, lccs, token, language=None):
         """Initialize instance with dictionary data.
 
         :param data: Dict with class system metadata.
@@ -42,7 +42,8 @@ class Dataset(dict):
         self._dataset = dataset
         self.metadata_json = self.prepare_metadata()
         self.__url = url
-        self.__lccs_server = LCCS(lccs, access_token=token)
+        self.__lccs_server = LCCS(lccs, access_token=token, language=language)
+        self.__language = language
 
     def prepare_metadata(self) -> Union[None, DSMetada]:
         """Prepare dataset metadata."""
@@ -56,6 +57,15 @@ class Dataset(dict):
     def id(self) -> str:
         """Return the dataset id."""
         return self['id']
+    @property
+    def classification_system_identifier(self) -> str:
+        """Return the dataset classification system id."""
+        return self['classification_system_identifier']
+
+    @property
+    def classification_system_title(self) -> str:
+        """Return the dataset classification system id."""
+        return self['classification_system_title']
 
     @property
     def classification_system_name(self) -> str:
@@ -74,8 +84,7 @@ class Dataset(dict):
 
     def _get_classification_system(self) -> ClassificationSystem:
         """Return the classification system object."""
-        system_id = f"{self['classification_system_name']}-{self['classification_system_version']}"
-        return self.__lccs_server.classification_system(system_id)
+        return self.__lccs_server.classification_system(self.classification_system_identifier)
 
     @property
     def classification_system(self) -> ClassificationSystem:
@@ -172,6 +181,7 @@ class Dataset(dict):
         url = f'{self._dataset._url}/datasets/data'
 
         filter["access_token"] = self._dataset._access_token
+        filter["language"] =  self.__language
         filter["dataset_id"] = self.id
 
         if data_id:

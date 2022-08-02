@@ -21,23 +21,24 @@ class Config:
         self.service = None
         self.lccs_url = None
         self.access_token = None
+        self.language = None
 
 
 pass_config = click.make_pass_decorator(Config, ensure=True)
 
 
 @click.group()
-@click.option('--url', default='http://127.0.0.1:5000/',
+@click.option('--url', default='http://127.0.0.1:5000/', 
               help='The Sample-WS address (an URL).')
 @click.option('--access-token', default=None, help='Personal Access Token of the BDC Auth')
-@click.option('--lccs_url', type=click.STRING, default='https://brazildatacube.dpi.inpe.br/lccs',
+@click.option('--lccs-url', type=click.STRING, default='https://brazildatacube.dpi.inpe.br/lccs',
               help='The LCCS-WS address (an URL).')
 @click.version_option()
 @pass_config
-def cli(config, url, lccs_url, access_token=None):
+def cli(config, url, lccs_url, access_token=None, language=None):
     """Sample on command line."""
     config.url = url
-    config.service = SAMPLE(url=url, access_token=access_token, lccs_url=lccs_url)
+    config.service = SAMPLE(url=url, access_token=access_token, lccs_url=lccs_url, language=language)
 
 
 @cli.command()

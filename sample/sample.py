@@ -45,7 +45,6 @@ class SAMPLE:
     def _validate_language(self, language):
         """Get the support language from service."""
         if language in [e.value for e in self._support_l]:
-            # return f'&language={language}'
             return language
         else:
             s = ', '.join([e for e in self.allowed_language])

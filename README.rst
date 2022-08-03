@@ -23,8 +23,8 @@ Python Client Library for Sample Database Model
         :target: https://codecov.io/gh/brazil-data-cube/sample.py
         :alt: Code Coverage Test
 
-.. image:: https://readthedocs.org/projects/sample/badge/?version=latest
-        :target: https://lccs.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/sample-py/badge/?version=latest
+        :target: https://sample-py.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
 .. image:: https://img.shields.io/badge/lifecycle-experimental-orange.svg
@@ -77,7 +77,7 @@ Documentation
 =============
 
 
-See https://samplepy.readthedocs.io/en/latest/
+See https://sample-py.readthedocs.io/en/latest/
 
 
 License

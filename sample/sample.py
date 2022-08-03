@@ -23,7 +23,7 @@ class SAMPLE:
         `Sample-DB <https://github.com/brazil-data-cube/sample-db>`_.
     """
 
-    def __init__(self, url, access_token=None, lccs_url=None):
+    def __init__(self, url: str, access_token: str=None, lccs_url: str=None, language: str=None):
         """Create a WLTS client attached to the given host address (an URL).
 
         Args:
@@ -33,6 +33,22 @@ class SAMPLE:
         self._url = url.rstrip('/')
         self._access_token = access_token
         self._lccs_url = lccs_url if lccs_url else 'https://brazildatacube.dpi.inpe.br/lccs'
+        self._support_l = self._support_language()
+        self._language = self._validate_language(language) if language else ''
+
+    def _support_language(self):
+        """Get the support language from service."""
+        import enum
+        data = Utils._get(f'{self._url}/')
+        return enum.Enum('Language', {i['language']: i['language'] for i in data['supported_language']}, type=str)
+
+    def _validate_language(self, language):
+        """Get the support language from service."""
+        if language in [e.value for e in self._support_l]:
+            return language
+        else:
+            s = ', '.join([e for e in self.allowed_language])
+            raise KeyError(f'Language not supported! Use: {s}')
 
     def _describe_dataset(self, dataset_id: str = None, dataset_name: str = None, dataset_version: str = None) -> dict:
         """Describe a give collection.
@@ -62,7 +78,7 @@ class SAMPLE:
             ds_metadata = self._describe_dataset(dataset_id, dataset_name, dataset_version)
         except requests.HTTPError as e:
             raise KeyError(f'Could not retrieve information for dataset!')
-        return Dataset(self, url=self._url, data=ds_metadata, lccs=self._lccs_url, token=self._access_token)
+        return Dataset(self, url=self._url, data=ds_metadata, lccs=self._lccs_url, token=self._access_token, language=self._language)
 
     def _list_datasets(self) -> List[dict]:
         """Return a list of all dataset available.

@@ -10,6 +10,13 @@
 Changes
 =======
 
+Version 0.8.1 (2022-08-05)
+--------------------------
+
+- Review jinja template (`#41 <https://github.com/brazil-data-cube/sample.py/issues/41>`_).
+- Update lccs.py to 0.8.1 (`#40 <https://github.com/brazil-data-cube/sample.py/issues/40>`_).
+- Add support for sample-ws 0.4.0 (`#39 <https://github.com/brazil-data-cube/sample.py/issues/30>`_).
+
 Version 0.8.0 (2022-02-07)
 --------------------------
 

@@ -1,0 +1,38 @@
+<div>
+    <b> {{ds.title}} </b>
+</div>
+<div>
+    <b>ID:</b> {{ds.id}}
+</div>
+<div>
+    <b>Name:</b> {{ds.name}}
+</div>
+<div>
+    <b>Version:</b> {{ds.version}}
+</div>
+<div>
+    <b>Start Date:</b> {{ds['extent']['temporal']['start_date']}}
+</div>
+<div>
+    <b>End Date:</b> {{ds['extent']['temporal']['end_date']}}
+</div>
+</br>
+<div>
+    <b>BBox</b>
+</div>
+<div>
+    <table>
+        <tr>
+            <th>xmin</th>
+            <th>ymin</th>
+            <th>xmax</th>
+            <th>ymax</th>
+        </tr>
+        <tr>
+            <td>{{ds['extent']['spatial']['bbox'][0]}}</td>
+            <td>{{ds['extent']['spatial']['bbox'][1]}}</td>
+            <td>{{ds['extent']['spatial']['bbox'][2]}}</td>
+            <td>{{ds['extent']['spatial']['bbox'][3]}}</td>
+        </tr>
+    </table>
+</div>

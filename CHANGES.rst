@@ -10,7 +10,7 @@
 Changes
 =======
 
-Version 0.8.1 (2022-08-05)
+Version 0.9.0 (2022-08-03)
 --------------------------
 
 - Review jinja template (`#41 <https://github.com/brazil-data-cube/sample.py/issues/41>`_).
